@@ -1,27 +1,27 @@
-"use strict";
+'use strict';
 
 const CI = !!process.env.CI;
 
 module.exports = {
   clearMocks: true,
   collectCoverage: CI,
-  coverageDirectory: "reports/coverage",
-  coverageProvider: "v8",
+  coverageDirectory: 'reports/coverage',
+  coverageProvider: 'v8',
   reporters: [
-    "default",
+    'default',
     CI && [
-      "jest-junit",
+      'jest-junit',
       {
-        ancestorSeparator: " › ",
-        classNameTemplate: "{classname}",
+        ancestorSeparator: ' › ',
+        classNameTemplate: '{classname}',
         includeConsoleOutput: true,
-        outputDirectory: "reports/junit",
+        outputDirectory: 'reports/junit',
         outputName: `jest.xml`,
-        suiteName: "Unit Tests",
-        titleTemplate: "{title}",
+        suiteName: 'Unit Tests',
+        titleTemplate: '{title}',
       },
     ],
   ].filter(Boolean),
-  testMatch: ["**/src/**/?(*.)+(spec|test).[tj]s?(x)"],
-  testPathIgnorePatterns: ["/node_modules/"],
+  testMatch: ['**/src/**/?(*.)+(spec|test).[tj]s?(x)'],
+  testPathIgnorePatterns: ['/node_modules/'],
 };

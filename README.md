@@ -4,15 +4,19 @@
 
 > Check Run Reporter's client library, CLI, and CI integrations.
 
-This is a monorepo (sort of) for Check Run Reporter's client library, CLI, and CI integrations. Instead of mainting separate test suites (if any tests at all) for each plugin, this repo contains the core TypeScript code as well as CI plugin integration code. As part of the build and release process, each plugin is push to the appopropriate repository for consumption.
+This is a monorepo (sort of) for Check Run Reporter's client library, CLI, and
+CI integrations. Instead of mainting separate test suites (if any tests at all)
+for each plugin, this repo contains the core TypeScript code as well as CI
+plugin integration code. As part of the build and release process, each plugin
+is push to the appopropriate repository for consumption.
 
 <!-- toc -->
 
-- [Install](#install)
-- [Usage](#usage)
-- [Maintainers](#maintainers)
-- [Contributing](#contributing)
-- [License](#license)
+-   [Install](#install)
+-   [Usage](#usage)
+-   [Maintainers](#maintainers)
+-   [Contributing](#contributing)
+-   [License](#license)
 
 <!-- tocstop -->
 
