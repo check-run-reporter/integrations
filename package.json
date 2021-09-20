@@ -8,7 +8,9 @@
     "build:readme": "markdown-toc -i README.md",
     "lint": "npm-run-all lint:*",
     "lint:changelog": "commitlint --from origin/master --to HEAD",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint:readme": "echo \"TODO\" && exit",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
@@ -26,6 +28,8 @@
     "@commitlint/config-conventional": "^13.1.0",
     "lint-staged": "^11.1.2",
     "markdown-toc": "^1.2.0",
-    "npm-run-all": "^4.1.5"
-  }
+    "npm-run-all": "^4.1.5",
+    "husky": "^7.0.0"
+  },
+  "lint-staged": {}
 }
