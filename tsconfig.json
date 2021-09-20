@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
+    "declaration": true,
+    "esModuleInterop": true,
+    "jsx": "react",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "outDir": "dist/types",
+    "resolveJsonModule": true,
+    "strict": true,
+    "target": "es2020", // node 14
+    "types": [
+      "jest"
+    ]
+  },
+  "include": [
+    "./src/**/*.ts",
+  ]
+}

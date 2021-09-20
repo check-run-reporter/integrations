@@ -1,0 +1,22 @@
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+    directory: "/"
+    schedule:
+      interval: "daily"
+
+  - package-ecosystem: "npm"
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+    directory: "/"
+    ignore:
+      - dependency-name: "@types/node"
+        versions:
+        - "> 14"
+    schedule:
+      interval: "daily"
+    versioning-strategy: "increase"

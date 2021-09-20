@@ -1,0 +1,35 @@
+env:
+  browser: false
+  node: true
+
+extends:
+  - 'plugin:@ianwremmel/ianwremmel/node'
+
+overrides:
+  # make sure eslint lints all files
+  - files:
+      - '**/*.js'
+      - '**/*.jsx'
+      - '**/*.ts'
+      - '**/*.tsx'
+
+  - files:
+      - '**/*.ts'
+      - '**/*.tsx'
+    extends:
+      - 'plugin:@ianwremmel/ianwremmel/typescript'
+    rules:
+      no-use-before-define: off
+      '@typescript-eslint/no-use-before-define':
+        - error
+        - classes: true
+          functions: false
+          variables: true
+
+  - files:
+      - '**/*.md/**'
+    rules:
+      import/no-unresolved: off
+
+parserOptions:
+  sourceType: 'script'
