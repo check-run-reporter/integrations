@@ -12,7 +12,8 @@
     "strict": true,
     "target": "es2020", // node 14
     "types": [
-      "jest"
+      "jest",
+      "node"
     ]
   },
   "include": [
