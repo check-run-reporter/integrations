@@ -2,7 +2,7 @@
 . "$(dirname "$0")/_/husky.sh"
 
 # Lint staged files
-# TODO npx --no-install lint-staged
+npx --no-install lint-staged
 
 # Make sure the readme TOC is up to date
 if ! git diff --exit-code README.md; then
