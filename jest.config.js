@@ -22,6 +22,6 @@ module.exports = {
       },
     ],
   ].filter(Boolean),
-  testMatch: ['**/src/**/?(*.)+(spec|test).[tj]s?(x)'],
+  testMatch: [`**/${CI ? 'dist' : 'src'}/**/?(*.)+(spec|test).[tj]s?(x)`],
   testPathIgnorePatterns: ['/node_modules/'],
 };
