@@ -41,18 +41,22 @@ jobs:
         env:
           ESLINT_FORMAT_OPTIONS: '--format json-with-metadata --output-file reports/style/eslint.json'
           TSC_OPTIONS: '| tee reports/style/tsc.log'
-      - uses: check-run-reporter/action@v2.0.0
-        if: ${{ always() }}
-        with:
-          token: '62fe22eb-69e1-436d-b85a-82b14847e4cc'
-          label: ESLint
-          report: 'reports/style/eslint.json'
-      - uses: check-run-reporter/action@v2.0.0
-        if: ${{ always() }}
-        with:
-          token: '62fe22eb-69e1-436d-b85a-82b14847e4cc'
-          label: TSC
-          report: 'reports/style/tsc.log'
+      # There's a bug prevent CRR from working for this repo for the moment. 
+      # Need to fix before CRR can be used here.
+      # - uses: check-run-reporter/action@v2.0.0
+      #   if: ${{ always() }}
+      #   with:
+      #     token: '62fe22eb-69e1-436d-b85a-82b14847e4cc'
+      #     label: ESLint
+      #     report: 'reports/style/eslint.json'
+      # There's a bug prevent CRR from working for this repo for the moment. 
+      # Need to fix before CRR can be used here.
+      # - uses: check-run-reporter/action@v2.0.0
+      #   if: ${{ always() }}
+      #   with:
+      #     token: '62fe22eb-69e1-436d-b85a-82b14847e4cc'
+      #     label: TSC
+      #     report: 'reports/style/tsc.log'
 
   test:
     runs-on: ubuntu-latest
@@ -71,9 +75,11 @@ jobs:
             ${{ runner.os }}-
       - run: npm ci
       - run: npm test
-      - uses: check-run-reporter/action@v2.0.0
-        if: ${{ always() }}
-        with:
-          token: '62fe22eb-69e1-436d-b85a-82b14847e4cc'
-          label: Unit Tests
-          report: 'reports/junit/**/*.xml'
+      # There's a bug prevent CRR from working for this repo for the moment. 
+      # Need to fix before CRR can be used here.
+      # - uses: check-run-reporter/action@v2.0.0
+      #   if: ${{ always() }}
+      #   with:
+      #     token: '62fe22eb-69e1-436d-b85a-82b14847e4cc'
+      #     label: Unit Tests
+      #     report: 'reports/junit/**/*.xml'
