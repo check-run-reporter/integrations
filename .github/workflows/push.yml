@@ -74,6 +74,7 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
       - run: npm ci
+      - run: npm run build
       - run: npm test
       # There's a bug prevent CRR from working for this repo for the moment. 
       # Need to fix before CRR can be used here.

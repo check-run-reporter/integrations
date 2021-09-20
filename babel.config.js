@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 module.exports = function (api) {
   api.cache.using(
@@ -9,16 +9,16 @@ module.exports = function (api) {
   const config = {
     comments: true,
     presets: [
-      "@babel/preset-typescript",
+      '@babel/preset-typescript',
       [
-        "@babel/preset-env",
+        '@babel/preset-env',
         {
-          modules: process.env.BUILD_TARGET === "modules" ? false : undefined,
-          targets: { node: true },
+          modules: process.env.BUILD_TARGET === 'modules' ? false : undefined,
+          targets: {node: true},
         },
       ],
     ],
-    retainLines: process.env.NODE_ENV !== "production",
+    retainLines: process.env.NODE_ENV !== 'production',
     sourceMaps: true,
   };
 

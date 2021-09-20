@@ -9,5 +9,9 @@ if ! git diff --exit-code README.md; then
   echo 'README.md has unstaged changes. Please stage or stash them before committing'
   exit 1
 fi
-npm run build:readme
-git add README.md
+
+if command -v gmake 2>/dev/null; then
+  gmake README.md
+else
+  make README.md
+fi

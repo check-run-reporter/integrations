@@ -1,7 +1,7 @@
-import { doesItWork } from ".";
+import {doesItWork} from '.';
 
-describe("index", () => {
-  it("works", () => {
+describe('index', () => {
+  it('works', () => {
     expect(doesItWork()).toBe(true);
   });
 });

@@ -4,6 +4,7 @@ env:
 
 extends:
   - 'plugin:@ianwremmel/ianwremmel/node'
+  - 'prettier'
 
 overrides:
   # make sure eslint lints all files
