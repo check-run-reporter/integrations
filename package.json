@@ -1,0 +1,31 @@
+{
+  "name": "@check-run-reporter/cli",
+  "version": "0.0.0-development",
+  "description": "A GitHub action for uploading structured test reports to > [check-run-reporter.com](https://www.check-run-reporter.com).",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "npm-run-all build:*",
+    "build:readme": "markdown-toc -i README.md",
+    "lint": "npm-run-all lint:*",
+    "lint:changelog": "commitlint --from origin/master --to HEAD",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/check-run-reporter/integrations.git"
+  },
+  "keywords": [],
+  "author": "Ian Remmel, LLC",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/check-run-reporter/integrations/issues"
+  },
+  "homepage": "https://www.check-run-reporter.com",
+  "devDependencies": {
+    "@commitlint/cli": "^13.1.0",
+    "@commitlint/config-conventional": "^13.1.0",
+    "lint-staged": "^11.1.2",
+    "markdown-toc": "^1.2.0",
+    "npm-run-all": "^4.1.5"
+  }
+}
