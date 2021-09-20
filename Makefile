@@ -42,16 +42,19 @@ VERSION := $(shell jq -r .version package.json)
 ## Files
 ###############################################################################
 
-SRC_FILES       := $(shell find src -name '*.ts')
-DIST_CJS_FILES  := $(subst .ts,.js, $(subst src,dist/cjs,$(SRC_FILES)))
-DIST_ESM_FILES  := $(subst .ts,.js, $(subst src,dist/esm,$(SRC_FILES)))
+SRC_FILES        := $(shell find src -name '*.ts')
+DIST_CJS_FILES   := $(subst .ts,.js, $(subst src,dist/cjs,$(SRC_FILES)))
+DIST_ESM_FILES   := $(subst .ts,.js, $(subst src,dist/esm,$(SRC_FILES)))
 DIST_TYPES_FILES := $(subst .ts,.d.ts, $(subst src,dist/types,$(SRC_FILES)))
+
+EXES             := dist/pkg/crr-$(VERSION)-linux dist/pkg/crr-$(VERSION)-macos dist/pkg/crr-$(VERSION)-windows.exe dist/ncc/index.js
+EXE_SHAS         := $(addsuffix .sha1, $(EXES))
 
 ###############################################################################
 ## Default Target
 ###############################################################################
 
-all: dist/pkg/crr-$(VERSION)-linux dist/pkg/crr-$(VERSION)-macos dist/pkg/crr-$(VERSION)-windows.exe $(DIST_CJS_FILES) $(DIST_ESM_FILES) $(DIST_TYPES_FILES) README.md
+all: $(EXES) $(EXE_SHAS) $(DIST_CJS_FILES) $(DIST_ESM_FILES) $(DIST_TYPES_FILES) README.md
 
 ###############################################################################
 ## Helpers
@@ -77,6 +80,9 @@ $(DIST_ESM_FILES) &: $(SRC_FILES)
 $(DIST_TYPES_FILES) &: $(SRC_FILES)
 > $(NPX) rimraf dist/types
 > $(NPX) tsc --emitDeclarationOnly
+
+%.sha1: %
+> sha1sum $< > $@
 
 ###############################################################################
 ## Targets
