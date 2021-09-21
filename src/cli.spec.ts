@@ -16,7 +16,12 @@ it('prints help and exits', () => {
   expect(stderr.mock.calls).toMatchInlineSnapshot(`
 Array [
   Array [
-    "Options:
+    "jest <command>
+
+Commands:
+  jest submit  Submit report files to Check Run Reporter
+
+Options:
   --version  Show version number                                       [boolean]
   --help     Show help                                                 [boolean]",
   ],
