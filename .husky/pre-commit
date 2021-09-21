@@ -10,8 +10,12 @@ if ! git diff --exit-code README.md; then
   exit 1
 fi
 
-if command -v gmake 2>/dev/null; then
-  gmake README.md
-else
-  make README.md
+# At this point, we know there are no unstaged README changes, so only 
+# regenerate the toc if there are staged changes.
+if ! git diff --staged --exit-code README.md; then 
+  if command -v gmake 2>/dev/null; then
+    gmake README.md
+  else
+    make README.md
+  fi
 fi
