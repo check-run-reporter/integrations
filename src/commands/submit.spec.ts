@@ -1,6 +1,8 @@
 import mockFs from 'mock-fs';
 import nock from 'nock';
 
+import {logger} from '../lib/logger';
+
 import {submit} from './submit';
 
 describe('submit()', () => {
@@ -29,7 +31,7 @@ describe('submit()', () => {
         token: 'FAKE TOKEN',
         url: 'https://api.check-run-reporter.com/api/v1/submissions',
       },
-      {logger: console}
+      {logger}
     );
   });
 });
