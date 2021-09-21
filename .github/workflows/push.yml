@@ -134,10 +134,8 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
       - run: npm ci
-      - uses: actions/download-artifact@v2
-        with:
-          name: dist
-          path: dist
+      # Remember: Can't use artifacts here because we need to build during 
+      # semantic-release to figure out the version number
       - run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
