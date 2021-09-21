@@ -79,5 +79,8 @@
   },
   "dependencies": {
     "yargs": "^17.1.1"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
