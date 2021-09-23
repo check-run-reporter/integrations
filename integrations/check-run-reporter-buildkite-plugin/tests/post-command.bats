@@ -1,7 +1,5 @@
 #!/usr/bin/env bats
 
-load '/usr/local/lib/bats/load.bash'
-
 @test "Uploads a single report" {
     # Mock the environment for when we're running tests outside of buildkite
     export BUILDKITE_LABEL=${BUILDKITE_LABEL:-bats}
