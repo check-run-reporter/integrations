@@ -9,7 +9,7 @@ jobs:
   #       with:
   #         fetch-depth: 0
   #     - uses: ianwremmel/prevent-fixup-commits@v1.0.2
-  
+
   # TODO fix the nopush action to handle branch names other than master
   # nopush:
   #   runs-on: ubuntu-latest
@@ -19,7 +19,7 @@ jobs:
   #         fetch-depth: 0
   #     - uses: ianwremmel/prevent-nopush-commits@v1.0.3
 
-  build: 
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -77,7 +77,7 @@ jobs:
           report: 'reports/style/tsc.log'
 
   test:
-    needs: 
+    needs:
       - build
     runs-on: ubuntu-latest
     steps:
@@ -127,8 +127,10 @@ jobs:
       - build
       # TODO - fixup
       - lint
+      - lint-integrations-buildkite
       # TODO - nopush
       - test
+      - test-integrations-buildkite
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -144,9 +146,10 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
       - run: npm ci
-      # Remember: Can't use artifacts here because we need to build during 
+      # Remember: Can't use artifacts here because we need to build during
       # semantic-release to figure out the version number
       - run: npx semantic-release
         env:
+          CHECK_RUN_REPORTER__INTEGRATIONS_PUBLISH_TOKEN: ${{ secrets.CHECK_RUN_REPORTER__INTEGRATIONS_PUBLISH_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

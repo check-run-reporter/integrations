@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+###
+# Inspired by https://github.com/cpina/github-action-push-to-another-repository
+###
+
+set -euo pipefail
+
+CLONE_DIR=$(mktemp -d)
+TARGET_BRANCH=main
+TOKEN=$CHECK_RUN_REPORTER__INTEGRATIONS_PUBLISH_TOKEN
+
+DESTINATION_REPOSITORY_USERNAME=check-run-reporter
+DESTINATION_REPOSITORY_NAME=check-run-reporter-buildkite-plugin
+
+SOURCE_DIRECTORY=integrations/check-run-reporter-buildkite-plugin
+
+COMMIT_MESSAGE="See ORIGIN_COMMIT from $GITHUB_REF"
+
+VERSION=$(cat .buildkite_version)
+
+git config --global user.email "1182361+ianwremmel@users.noreply.github.com"
+git config --global user.name "Automation"
+
+git clone --single-branch --branch "$TARGET_BRANCH" "https://$GITHUB_ACTOR:$TOKEN@github.com/$DESTINATION_REPOSITORY_USERNAME/$DESTINATION_REPOSITORY_NAME.git" "$CLONE_DIR"
+
+TARGET_DIR=$(mktemp -d)
+# This mv has been the easier way to be able to remove files that were there
+# but not anymore. Otherwise we had to remove the files from "$CLONE_DIR",
+# including "." and with the exception of ".git/"
+mv "$CLONE_DIR/.git" "$TARGET_DIR"
+
+cp -ra "$SOURCE_DIRECTORY"/. "$TARGET_DIR"
+cd "$TARGET_DIR"
+
+ORIGIN_COMMIT="https://github.com/$GITHUB_REPOSITORY/commit/$GITHUB_SHA"
+COMMIT_MESSAGE="${COMMIT_MESSAGE/ORIGIN_COMMIT/$ORIGIN_COMMIT}"
+COMMIT_MESSAGE="${COMMIT_MESSAGE/\$GITHUB_REF/$GITHUB_REF}"
+
+git add .
+
+git diff-index --quiet HEAD || git commit --message "$COMMIT_MESSAGE"
+git push "https://$GITHUB_ACTOR:$TOKEN@github.com/$DESTINATION_REPOSITORY_USERNAME/$DESTINATION_REPOSITORY_NAME.git" --set-upstream "$TARGET_BRANCH"
+git tag "v$VERSION"
+git push origin --tags
