@@ -6,7 +6,7 @@
 steps:
     - command: npm test
       plugins:
-          - check-run-reporter/check-run-reporter#__VERSION__:
+          - check-run-reporter/check-run-reporter#v0.0.0:
                 report: 'reports/junit/**/*.xml'
                 token: '<your repo token>'
 ```
