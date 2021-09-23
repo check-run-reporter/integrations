@@ -106,6 +106,14 @@ jobs:
           label: Unit Tests
           report: 'reports/junit/**/*.xml'
 
+  lint-integrations-buildkite:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: 'docker://buildkite/plugin-linter'
+        with:
+          args:  --id check-run-reporter/check-run-reporter --path /github/workspace/integrations/check-run-reporter-buildkite-plugin
+
   release:
     needs:
       - build
