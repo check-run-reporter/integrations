@@ -36,7 +36,8 @@ NPX := npx --no-install
 ## Constants
 ###############################################################################
 
-VERSION ?= $(shell jq -r .version package.json)
+VERSION           ?= $(shell jq -r .version package.json)
+BUILDKITE_VERSION := $(shell VERSION=$(VERSION) scripts/get-buildkite-version)
 
 ###############################################################################
 ## Files
@@ -50,11 +51,13 @@ DIST_TYPES_FILES := $(subst .ts,.d.ts, $(subst src,dist/types,$(SRC_FILES)))
 EXES             := dist/pkg/crr-$(VERSION)-linux dist/pkg/crr-$(VERSION)-macos dist/pkg/crr-$(VERSION)-windows.exe dist/ncc/index.js
 EXE_SHAS         := $(addsuffix .sha1, $(EXES))
 
+BUILDKITE_ALL    := integrations/check-run-reporter-buildkite-plugin/README.md
+
 ###############################################################################
 ## Default Target
 ###############################################################################
 
-all: $(EXES) $(EXE_SHAS) $(DIST_CJS_FILES) $(DIST_ESM_FILES) $(DIST_TYPES_FILES) README.md
+all: $(EXES) $(EXE_SHAS) $(DIST_CJS_FILES) $(DIST_ESM_FILES) $(DIST_TYPES_FILES) README.md $(BUILDKITE_ALL)
 
 ###############################################################################
 ## Helpers
@@ -104,3 +107,10 @@ README.md:
 > $(NPX) markdown-toc -i --bullets='-' --maxdepth=3 README.md
 > $(NPX) prettier --write README.md
 .PHONY: README.md
+
+.buildkite_version:
+> echo $(BUILDKITE_VERSION) > .buildkite_version
+
+integrations/check-run-reporter-buildkite-plugin/README.md: .buildkite_version
+> sed -i.bak -e "s#0.0.0#$(BUILDKITE_VERSION)#g" $@
+> rm $@.bak

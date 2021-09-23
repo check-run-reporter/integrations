@@ -1,0 +1,19 @@
+#!/usr/bin/env node
+
+/**
+ * @file This file produces new version for the buildkite plugin based on the
+ * repo versoin. The buildkite plugin was already at version 1 when this repo
+ * was created.
+ */
+
+'use strict';
+
+const assert = require('assert');
+
+const semver = require('semver');
+
+assert(!!process.env.VERSION, 'VERSION env var must be defined');
+
+const version = semver.parse(process.env.VERSION);
+version.major += 1;
+console.log(version.format());
