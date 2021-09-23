@@ -117,14 +117,10 @@ jobs:
   test-integrations-buildkite:
     runs-on: ubuntu-latest
     steps:
-      - name: Setup BATS
-        uses: mig4/setup-bats@v1
-        with:
-          bats-version: 1.4.1
       - uses: actions/checkout@v2
-      - run: pwd
-      - run: ls
-      - run: cd integrations/check-run-reporter-buildkite-plugin/ && bats tests
+        with:
+          submodules: recursive
+      - run: ./integrations/check-run-reporter-buildkite-plugin/tests/bats/bin/bats ./integrations/check-run-reporter-buildkite-plugin/tests/post-command.bats
 
   release:
     needs:
