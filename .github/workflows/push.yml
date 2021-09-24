@@ -40,6 +40,10 @@ jobs:
         with:
           name: dist
           path: dist
+      - uses: actions/upload-artifact@v2
+        with:
+          name: buildkite-bin
+          path: integrations/check-run-reporter-buildkite-plugin/bin
 
   lint:
     runs-on: ubuntu-latest
@@ -115,11 +119,19 @@ jobs:
           args:  --id check-run-reporter/check-run-reporter --path /github/workspace/integrations/check-run-reporter-buildkite-plugin
 
   test-integrations-buildkite:
+    needs:
+      - build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
         with:
           submodules: recursive
+      - uses: actions/download-artifact@v2
+        with:
+          name: buildkite-bin
+          path: integrations/check-run-reporter-buildkite-plugin/bin
+      # artifacts strip file permissions
+      - run: chmod +x integrations/check-run-reporter-buildkite-plugin/bin/*
       - run: ./integrations/check-run-reporter-buildkite-plugin/tests/bats/bin/bats ./integrations/check-run-reporter-buildkite-plugin/tests/post-command.bats
 
   release:
@@ -147,7 +159,8 @@ jobs:
             ${{ runner.os }}-
       - run: npm ci
       # Remember: Can't use artifacts here because we need to build during
-      # semantic-release to figure out the version number
+      # semantic-release to figure out the version number. Also, artifacts mess
+      # with file permissions (like +x).
       - run: npx semantic-release
         env:
           CHECK_RUN_REPORTER__INTEGRATIONS_PUBLISH_TOKEN: ${{ secrets.CHECK_RUN_REPORTER__INTEGRATIONS_PUBLISH_TOKEN }}

@@ -43,15 +43,16 @@ BUILDKITE_VERSION := $(shell VERSION=$(VERSION) scripts/get-buildkite-version)
 ## Files
 ###############################################################################
 
-SRC_FILES        := $(shell find src -name '*.ts')
-DIST_CJS_FILES   := $(subst .ts,.js, $(subst src,dist/cjs,$(SRC_FILES)))
-DIST_ESM_FILES   := $(subst .ts,.js, $(subst src,dist/esm,$(SRC_FILES)))
-DIST_TYPES_FILES := $(subst .ts,.d.ts, $(subst src,dist/types,$(SRC_FILES)))
+SRC_FILES           := $(shell find src -name '*.ts')
+DIST_CJS_FILES      := $(subst .ts,.js, $(subst src,dist/cjs,$(SRC_FILES)))
+DIST_ESM_FILES      := $(subst .ts,.js, $(subst src,dist/esm,$(SRC_FILES)))
+DIST_TYPES_FILES    := $(subst .ts,.d.ts, $(subst src,dist/types,$(SRC_FILES)))
 
-EXES             := dist/pkg/crr-$(VERSION)-linux dist/pkg/crr-$(VERSION)-macos dist/pkg/crr-$(VERSION)-windows.exe dist/ncc/index.js
-EXE_SHAS         := $(addsuffix .sha1, $(EXES))
+EXES                := dist/pkg/crr-$(VERSION)-linux dist/pkg/crr-$(VERSION)-macos dist/pkg/crr-$(VERSION)-windows.exe dist/ncc/index.js
+EXE_SHAS            := $(addsuffix .sha1, $(EXES))
 
-BUILDKITE_ALL    := integrations/check-run-reporter-buildkite-plugin/README.md
+BUILDKITE_ALL_SHORT := bin/crr-linux bin/crr-macos bin/crr-windows.exe README.md
+BUILDKITE_ALL       := $(addprefix integrations/check-run-reporter-buildkite-plugin/, $(BUILDKITE_ALL_SHORT))
 
 ###############################################################################
 ## Default Target
@@ -110,6 +111,10 @@ README.md:
 
 .buildkite_version:
 > echo $(BUILDKITE_VERSION) > .buildkite_version
+
+integrations/check-run-reporter-buildkite-plugin/bin/crr-%: dist/pkg/crr-$(VERSION)-%
+> mkdir -p $(@D)
+> cp $< $@
 
 integrations/check-run-reporter-buildkite-plugin/README.md: .buildkite_version
 > sed -i.bak -e "s#0.0.0#$(BUILDKITE_VERSION)#g" $@
