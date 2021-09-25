@@ -6,7 +6,10 @@ import FormData from 'form-data';
 import * as core from '@actions/core';
 import * as glob from '@actions/glob';
 import * as github from '@actions/github';
-import * as Webhooks from '@octokit/webhooks';
+// webhooks-types doesn't have a valid `main` property, so eslint can't tell
+// it's type-only
+// eslint-disable-next-line import/no-unresolved
+import type {PullRequestEvent} from '@octokit/webhooks-types';
 
 /**
  * Detmerins the value to send as "root".
@@ -38,8 +41,7 @@ export function determineSha(): string {
     core.info(
       `Workflow triggered by "pull_request" event, reading SHA from webhook payload`
     );
-    const pullRequestPayload = github.context
-      .payload as Webhooks.EventPayloads.WebhookPayloadPullRequest;
+    const pullRequestPayload = github.context.payload as PullRequestEvent;
     const {sha} = pullRequestPayload.pull_request.head;
     core.endGroup();
     return sha;

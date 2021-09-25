@@ -15,7 +15,7 @@
   "scripts": {
     "build": "if command -v gmake 2>/dev/null; then gmake all; else make all; fi",
     "build:types": "tsc --emitDeclarationOnly",
-    "eslint": "eslint ${ESLINT_FORMAT_OPTIONS:-} --ignore --ignore-path .gitignore",
+    "eslint": "eslint ${ESLINT_FORMAT_OPTIONS:-} --ignore --ignore-path .gitignore --ignore-pattern 'integrations/**/example/**'",
     "lint": "npm-run-all --continue-on-error --parallel lint:*",
     "lint:changelog": "commitlint --from origin/main --to HEAD",
     "lint:es": "npm run --silent eslint -- .",

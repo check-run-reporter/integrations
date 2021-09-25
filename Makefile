@@ -84,6 +84,7 @@ $(DIST_ESM_FILES) &: $(SRC_FILES)
 $(DIST_TYPES_FILES) &: $(SRC_FILES)
 > $(NPX) rimraf dist/types
 > $(NPX) tsc --emitDeclarationOnly
+> rm dist/types/integrations
 
 %.sha1: %
 > sha1sum $< > $@
