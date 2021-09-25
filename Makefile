@@ -51,6 +51,11 @@ DIST_TYPES_FILES    := $(subst .ts,.d.ts, $(subst src,dist/types,$(SRC_FILES)))
 EXES                := dist/pkg/crr-$(VERSION)-linux dist/pkg/crr-$(VERSION)-macos dist/pkg/crr-$(VERSION)-windows.exe dist/ncc/index.js
 EXE_SHAS            := $(addsuffix .sha1, $(EXES))
 
+ACTION_SRC_FILES    := $(shell find integrations/action/src -name '*.ts')
+ACTION_BUILD_FILES   := $(subst .ts,.js, $(subst src,build,$(ACTION_SRC_FILES)))
+ACTION_SHORT        := dist/index.js
+ACTION_ALL          := $(addprefix integrations/action/, $(ACTION_SHORT)) $(ACTION_BUILD_FILES)
+
 BUILDKITE_ALL_SHORT := bin/crr-linux bin/crr-macos bin/crr-windows.exe README.md
 BUILDKITE_ALL       := $(addprefix integrations/check-run-reporter-buildkite-plugin/, $(BUILDKITE_ALL_SHORT))
 
@@ -58,7 +63,7 @@ BUILDKITE_ALL       := $(addprefix integrations/check-run-reporter-buildkite-plu
 ## Default Target
 ###############################################################################
 
-all: $(EXES) $(EXE_SHAS) $(DIST_CJS_FILES) $(DIST_ESM_FILES) $(DIST_TYPES_FILES) README.md $(BUILDKITE_ALL)
+all: $(EXES) $(EXE_SHAS) $(DIST_CJS_FILES) $(DIST_ESM_FILES) $(DIST_TYPES_FILES) README.md $(ACTION_ALL) $(BUILDKITE_ALL)
 
 clean:
 > $(NPX) rimraf dist integrations/*/dist
@@ -124,3 +129,21 @@ integrations/check-run-reporter-buildkite-plugin/bin/crr-%: dist/pkg/crr-$(VERSI
 integrations/check-run-reporter-buildkite-plugin/README.md: .buildkite_version
 > sed -i.bak -e "s#0.0.0#$(BUILDKITE_VERSION)#g" $@
 > rm $@.bak
+
+
+###############################################################################
+## Action Rules
+###############################################################################
+
+$(ACTION_BUILD_FILES) &: $(ACTION_SRC_FILES)
+> $(NPX) rimraf integrations/actions/build
+> $(NPX) -w integrations/action babel --source-maps --extensions '.js,.ts' -d integrations/actions/build integrations/actions/src
+
+###############################################################################
+## Action Targets
+###############################################################################
+
+# for reasons I can't entirely explain, the `require.main === module` check
+# doesn't work if ncc is allowed to do the compilation.
+integrations/action/dist/index.js: $(ACTION_BUILD_FILES)
+> $(NPX) -w integrations/action ncc build build/index.js --source-map
