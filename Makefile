@@ -60,6 +60,10 @@ BUILDKITE_ALL       := $(addprefix integrations/check-run-reporter-buildkite-plu
 
 all: $(EXES) $(EXE_SHAS) $(DIST_CJS_FILES) $(DIST_ESM_FILES) $(DIST_TYPES_FILES) README.md $(BUILDKITE_ALL)
 
+clean:
+> $(NPX) rimraf dist integrations/*/dist
+.PHONY: clean
+
 ###############################################################################
 ## Helpers
 ###############################################################################
