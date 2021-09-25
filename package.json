@@ -94,5 +94,8 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "workspaces": [
+    "integrations/action"
+  ]
 }
