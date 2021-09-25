@@ -38,6 +38,7 @@ NPX := npx --no-install
 
 VERSION           ?= $(shell jq -r .version package.json)
 BUILDKITE_VERSION := $(shell VERSION=$(VERSION) scripts/get-buildkite-version)
+ACTION_VERSION    := $(shell VERSION=$(VERSION) scripts/get-action-version)
 
 ###############################################################################
 ## Files
@@ -53,7 +54,7 @@ EXE_SHAS            := $(addsuffix .sha1, $(EXES))
 
 ACTION_SRC_FILES    := $(shell find integrations/action/src -name '*.ts')
 ACTION_BUILD_FILES   := $(subst .ts,.js, $(subst src,build,$(ACTION_SRC_FILES)))
-ACTION_SHORT        := dist/index.js
+ACTION_SHORT        := dist/index.js README.md
 ACTION_ALL          := $(addprefix integrations/action/, $(ACTION_SHORT)) $(ACTION_BUILD_FILES)
 
 BUILDKITE_ALL_SHORT := bin/crr-linux bin/crr-macos bin/crr-windows.exe README.md
@@ -93,7 +94,7 @@ $(DIST_ESM_FILES) &: $(SRC_FILES)
 $(DIST_TYPES_FILES) &: $(SRC_FILES)
 > $(NPX) rimraf dist/types
 > $(NPX) tsc --emitDeclarationOnly
-> rm dist/types/integrations
+> $(NPX) rimraf dist/types/integrations
 
 %.sha1: %
 > sha1sum $< > $@
@@ -137,7 +138,7 @@ integrations/check-run-reporter-buildkite-plugin/README.md: .buildkite_version
 
 $(ACTION_BUILD_FILES) &: $(ACTION_SRC_FILES)
 > $(NPX) rimraf integrations/actions/build
-> $(NPX) -w integrations/action babel --source-maps --extensions '.js,.ts' -d integrations/actions/build integrations/actions/src
+> $(NPX) -w integrations/action babel --source-maps --extensions '.js,.ts' -d build src
 
 ###############################################################################
 ## Action Targets
@@ -147,3 +148,10 @@ $(ACTION_BUILD_FILES) &: $(ACTION_SRC_FILES)
 # doesn't work if ncc is allowed to do the compilation.
 integrations/action/dist/index.js: $(ACTION_BUILD_FILES)
 > $(NPX) -w integrations/action ncc build build/index.js --source-map
+
+.action_version:
+> echo $(ACTION_VERSION) > .action_version
+
+integrations/action/README.md: .action_version
+> sed -i.bak -e "s#0.0.0#$(ACTION_VERSION)#g" $@
+> rm $@.bak

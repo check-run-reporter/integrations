@@ -5,7 +5,7 @@ module.exports = {
     '@semantic-release/release-notes-generator',
     ["@semantic-release/exec", {
       "prepareCmd": "VERSION=${nextRelease.version} npm run build",
-      "publishCmd": "./scripts/publish-buildkite-plugin"
+      "publishCmd": "./scripts/publish-integrations"
     }],
     '@semantic-release/npm',
     [
