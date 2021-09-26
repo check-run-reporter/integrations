@@ -1,6 +1,2 @@
-/**
- * Example function
- */
-export function doesItWork() {
-  return true;
-}
+export * from './lib/logger';
+export * from './commands/submit';
