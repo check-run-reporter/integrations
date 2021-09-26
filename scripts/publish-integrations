@@ -11,9 +11,9 @@ export TOKEN=$CHECK_RUN_REPORTER__INTEGRATIONS_PUBLISH_TOKEN
 DESTINATION_REPOSITORY_USERNAME=check-run-reporter \
   DESTINATION_REPOSITORY_NAME=check-run-reporter-buildkite-plugin \
   SOURCE_DIRECTORY=integrations/check-run-reporter-buildkite-plugin \
-  publish-to-repo
+  ./scripts/publish-to-repo
 
 DESTINATION_REPOSITORY_USERNAME=check-run-reporter \
   DESTINATION_REPOSITORY_NAME=action \
   SOURCE_DIRECTORY=integrations/action \
-  publish-to-repo
+  ./scripts/publish-to-repo
