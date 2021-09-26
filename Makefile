@@ -151,7 +151,7 @@ $(ACTION_BUILD_FILES) &: $(ACTION_SRC_FILES)
 
 # for reasons I can't entirely explain, the `require.main === module` check
 # doesn't work if ncc is allowed to do the compilation.
-integrations/action/dist/index.js: $(ACTION_BUILD_FILES)
+integrations/action/dist/index.js: $(ACTION_BUILD_FILES) $(DIST_CJS_FILES)
 > $(NPX) -w integrations/action ncc build build/index.js --source-map
 
 .action_version:
