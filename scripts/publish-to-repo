@@ -7,20 +7,10 @@
 set -euo pipefail
 
 CLONE_DIR=$(mktemp -d)
-TARGET_BRANCH=main
-TOKEN=$CHECK_RUN_REPORTER__INTEGRATIONS_PUBLISH_TOKEN
-
-DESTINATION_REPOSITORY_USERNAME=check-run-reporter
-DESTINATION_REPOSITORY_NAME=check-run-reporter-buildkite-plugin
-
-SOURCE_DIRECTORY=integrations/check-run-reporter-buildkite-plugin
 
 COMMIT_MESSAGE="See ORIGIN_COMMIT from $GITHUB_REF"
 
 VERSION=$(cat .buildkite_version)
-
-git config --global user.email "1182361+ianwremmel@users.noreply.github.com"
-git config --global user.name "Automation"
 
 git clone --single-branch --branch "$TARGET_BRANCH" "https://$GITHUB_ACTOR:$TOKEN@github.com/$DESTINATION_REPOSITORY_USERNAME/$DESTINATION_REPOSITORY_NAME.git" "$CLONE_DIR"
 
