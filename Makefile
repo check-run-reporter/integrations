@@ -67,7 +67,12 @@ BUILDKITE_ALL       := $(addprefix integrations/check-run-reporter-buildkite-plu
 all: $(EXES) $(EXE_SHAS) $(DIST_CJS_FILES) $(DIST_ESM_FILES) $(DIST_TYPES_FILES) README.md $(ACTION_ALL) $(BUILDKITE_ALL)
 
 clean:
-> $(NPX) rimraf dist integrations/*/dist
+> $(NPX) rimraf dist integrations/*/dist integrations/check-run-reporter-buildkite-plugin/bin
+> sed -i.bak -e "s#$(BUILDKITE_VERSION)#0.0.0#g" integrations/check-run-reporter-buildkite-plugin/README.md
+> $(NPX) rimraf integrations/check-run-reporter-buildkite-plugin/README.md.bak
+> sed -i.bak -e "s#$(ACTION_VERSION)#0.0.0#g" integrations/action/README.md
+> $(NPX) rimraf integrations/action/README.md.bak
+> $(NPX) rimraf .action_version .buildkite_version
 .PHONY: clean
 
 ###############################################################################
