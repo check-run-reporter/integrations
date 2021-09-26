@@ -23,17 +23,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/cache@v2.1.6
-        env:
-          cache-name: cache-node-modules
+      - uses: actions/setup-node@v2
         with:
-          # npm cache files are stored in `~/.npm` on Linux/macOS
-          path: ~/.npm
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
+          node-version: '14'
+          cache: 'npm'
+      - run: npm i -g npm@7
       - run: npm ci
       - run: npm run build
       - uses: actions/upload-artifact@v2
@@ -51,17 +45,11 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - uses: actions/cache@v2.1.6
-        env:
-          cache-name: cache-node-modules
+      - uses: actions/setup-node@v2
         with:
-          # npm cache files are stored in `~/.npm` on Linux/macOS
-          path: ~/.npm
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
+          node-version: '14'
+          cache: 'npm'
+      - run: npm i -g npm@7
       - run: npm ci
       - run: npm run lint
         env:
@@ -86,17 +74,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/cache@v2.1.6
-        env:
-          cache-name: cache-node-modules
+      - uses: actions/setup-node@v2
         with:
-          # npm cache files are stored in `~/.npm` on Linux/macOS
-          path: ~/.npm
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
+          node-version: '14'
+          cache: 'npm'
+      - run: npm i -g npm@7
       - run: npm ci
       - uses: actions/download-artifact@v2
         with:
@@ -146,17 +128,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/cache@v2.1.6
-        env:
-          cache-name: cache-node-modules
+      - uses: actions/setup-node@v2
         with:
-          # npm cache files are stored in `~/.npm` on Linux/macOS
-          path: ~/.npm
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
+          node-version: '14'
+          cache: 'npm'
+      - run: npm i -g npm@7
       - run: npm ci
       # Remember: Can't use artifacts here because we need to build during
       # semantic-release to figure out the version number. Also, artifacts mess
