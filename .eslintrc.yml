@@ -6,6 +6,11 @@ extends:
   - 'plugin:@ianwremmel/ianwremmel/node'
   - 'prettier'
 
+ignorePatterns:
+  - '**/dist/**'
+  - '**/build/**'
+  - 'integrations/**/example/**'
+
 overrides:
   # make sure eslint lints all files
   - files:
