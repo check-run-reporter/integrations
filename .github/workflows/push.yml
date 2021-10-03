@@ -82,6 +82,11 @@ jobs:
     needs:
       - build
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        nodeCount: [2]
+        nodeIndex: [0, 1]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
@@ -98,7 +103,15 @@ jobs:
         with:
           name: dist
           path: dist
-      - run: npm test
+      - uses: ./integrations/action
+        id: split
+        with:
+          token: '62fe22eb-69e1-436d-b85a-82b14847e4cc'
+          label: Unit Tests
+          nodeCount: ${{ matrix.nodeCount }}
+          nodeIndex: ${{ matrix.nodeIndex }}
+          tests: 'dist/**/*.spec.js'
+      - run: npm test -- ${{ steps.split.outputs.tests }}
       - uses: ./integrations/action
         if: ${{ always() }}
         with:

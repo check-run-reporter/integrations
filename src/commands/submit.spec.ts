@@ -15,6 +15,7 @@ describe('submit()', () => {
 
   beforeEach(() => nock.disableNetConnect());
   afterEach(() => nock.enableNetConnect());
+
   afterEach(() => mockFs.restore());
 
   it('submits reports to check run reporter', async () => {

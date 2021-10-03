@@ -4,11 +4,17 @@ import {cli} from './cli';
 /** noop */
 function noop() {}
 /* eslint-enable @typescript-eslint/no-empty-function */
-// @ts-expect-error
-const exit = jest.spyOn(process, 'exit').mockImplementation(noop);
 
-const stdout = jest.spyOn(console, 'log');
-const stderr = jest.spyOn(console, 'error');
+let exit: jest.SpyInstance<ReturnType<NodeJS.Process['exit']>>,
+  stdout: jest.SpyInstance<ReturnType<Console['log']>>,
+  stderr: jest.SpyInstance<ReturnType<Console['error']>>;
+
+beforeEach(() => {
+  // @ts-expect-error
+  exit = jest.spyOn(process, 'exit').mockImplementation(noop);
+  stdout = jest.spyOn(console, 'log');
+  stderr = jest.spyOn(console, 'error');
+});
 
 it('prints help and exits', () => {
   cli(['', '']);
@@ -16,11 +22,11 @@ it('prints help and exits', () => {
   expect(stderr.mock.calls).toMatchInlineSnapshot(`
 Array [
   Array [
-    "processChild.js <command>
+    "jest <command>
 
 Commands:
-  processChild.js split   Split tests across multiple executors
-  processChild.js submit  Submit report files to Check Run Reporter
+  jest split   Split tests across multiple executors
+  jest submit  Submit report files to Check Run Reporter
 
 Options:
   --version  Show version number                                       [boolean]
