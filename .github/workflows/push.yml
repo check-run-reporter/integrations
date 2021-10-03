@@ -110,7 +110,7 @@ jobs:
           label: Unit Tests
           nodeCount: ${{ matrix.nodeCount }}
           nodeIndex: ${{ matrix.nodeIndex }}
-          tests: 'dist/**/*.spec.js'
+          tests: 'src/**/*.spec.ts'
       - run: npm test -- ${{ steps.split.outputs.tests }}
       - uses: ./integrations/action
         if: ${{ always() }}
