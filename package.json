@@ -47,6 +47,7 @@
     "@semantic-release/exec": "^6.0.1",
     "@types/glob": "^7.1.4",
     "@types/jest": "^27.0.2",
+    "@types/lodash": "^4.14.175",
     "@types/mock-fs": "^4.13.1",
     "@types/nock": "^11.1.0",
     "@types/node": "^14.17.17",
@@ -90,6 +91,7 @@
     "ci-info": "^3.2.0",
     "form-data": "^4.0.0",
     "glob": "^7.2.0",
+    "lodash": "^4.17.21",
     "yargs": "^17.1.1"
   },
   "publishConfig": {

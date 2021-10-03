@@ -4,9 +4,9 @@ import util from 'util';
 import axios, {AxiosError} from 'axios';
 import FormData from 'form-data';
 import axiosRetry from 'axios-retry';
-import glob from 'glob';
 
-import {Logger} from '../lib/logger';
+import {multiGlob} from '../lib/file';
+import {Context} from '../lib/types';
 
 axiosRetry(axios, {retries: 3});
 
@@ -21,46 +21,6 @@ interface SubmitArgs {
   readonly url: string;
 }
 
-interface Context {
-  readonly logger: Logger;
-}
-
-/**
- * Turns all the report paths and globs into a concrete set of paths.
- * @private
- */
-async function findReports(
-  reports: readonly string[],
-  {logger}: Context
-): Promise<readonly string[]> {
-  logger.group(`Locating files`);
-
-  const paths = new Set<string>();
-
-  for (const report of reports) {
-    logger.group(`Locating files in ${report}`);
-    const files = glob.sync(report);
-
-    if (files.length === 0) {
-      logger.warn(`Could not find any report files matching glob ${report}`);
-    }
-
-    files.forEach((file) => paths.add(file));
-
-    logger.groupEnd();
-  }
-
-  logger.info(`found ${paths.size} reports`);
-
-  if (paths.size === 0) {
-    throw new Error(`Could not find any report files matching specified globs`);
-  }
-
-  logger.groupEnd();
-
-  return Array.from(paths);
-}
-
 /**
  * Submit report files to Check Run Reporter
  */
@@ -70,7 +30,7 @@ export async function submit(
 ) {
   const {logger} = context;
 
-  const files = await findReports(report, context);
+  const files = await multiGlob(report, context);
 
   const formData = new FormData();
   for (const file of files) {
