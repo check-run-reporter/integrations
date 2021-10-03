@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import axios from 'axios';
-import yargs, {command} from 'yargs';
+import yargs from 'yargs';
 import {hideBin} from 'yargs/helpers';
 
 import {split} from './commands/split';
@@ -55,9 +55,8 @@ export function cli(argv: string[]) {
           },
         }),
       async ({tests, ...args}) => {
+        const directlyUseOutput = !process.stdout.isTTY;
         try {
-          const directlyUseOutput = !process.stdout.isTTY;
-
           const result = await split(
             {tests: tests.map(String), ...args},
             {logger: directlyUseOutput ? silentLogger : logger}
@@ -68,6 +67,11 @@ export function cli(argv: string[]) {
             console.log(JSON.stringify(result, null, 2));
           }
         } catch (err) {
+          // we only need to log here if we'd been intended to directlyUseOutput
+          // and therefore nothing else got logged.
+          if (!directlyUseOutput) {
+            throw err;
+          }
           if (axios.isAxiosError(err)) {
             console.error(
               `Check Run Reporter return a ${err.response?.status}`
@@ -75,9 +79,8 @@ export function cli(argv: string[]) {
             if (err.response?.data?.message?.details?.[0]?.message) {
               console.error(err.response.data.message.details[0].message);
             }
-          } else {
-            console.error(err);
           }
+          throw err;
         }
       }
     )

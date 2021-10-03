@@ -1,7 +1,7 @@
 import fs from 'fs';
 import util from 'util';
 
-import axios, {AxiosError} from 'axios';
+import axios from 'axios';
 import FormData from 'form-data';
 import axiosRetry from 'axios-retry';
 
@@ -43,11 +43,12 @@ export async function submit(
   formData.append('root', root);
   formData.append('sha', sha);
 
-  logger.group('Uploading report to Check Run Reporter');
   try {
+    logger.group('Uploading report to Check Run Reporter');
     logger.info(`Label: ${label}`);
     logger.info(`Root: ${root}`);
     logger.info(`SHA: ${sha}`);
+    logger.debug(`URL: ${url}`);
 
     const response = await axios.post(url, formData, {
       auth: {password: token, username: 'token'},
@@ -62,21 +63,17 @@ export async function submit(
     logger.info(`StatusText: ${response.statusText}`);
     logger.info(JSON.stringify(response.data, null, 2));
   } catch (err) {
-    if (!(err as AxiosError).isAxiosError) {
-      throw err;
+    if (axios.isAxiosError(err)) {
+      if (!err.response) {
+        // we didn't get a response, so rethrow before logging things that don't
+        // exist.
+        logger.error('Failed to make upload request');
+        throw err;
+      }
+
+      logger.error(`Request ID: ${err.response.headers['x-request-id']}`);
+      logger.error(util.inspect(err.response.data, {depth: 2}));
     }
-
-    const axerr = err as AxiosError;
-
-    if (!axerr.response) {
-      // we didn't get a response, so rethrow before logging things that don't
-      // exist.
-      logger.error('Failed to make upload request');
-      throw err;
-    }
-
-    logger.error(`Request ID: ${axerr.response.headers['x-request-id']}`);
-    logger.error(util.inspect(axerr.response.data, {depth: 2}));
 
     throw err;
   } finally {

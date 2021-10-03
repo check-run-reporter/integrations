@@ -186,7 +186,15 @@ async function main() {
 
 if (require.main === module) {
   main().catch((err) => {
+    if (axios.isAxiosError(err)) {
+      core.setFailed(err);
+
+      core.error(`Check Run Reporter returned a ${err.response?.status}`);
+      if (err.response?.data?.message?.details?.[0]?.message) {
+        core.error(err.response.data.message.details[0].message);
+      }
+    }
+
     core.error(err.stack);
-    core.setFailed(err.message);
   });
 }
