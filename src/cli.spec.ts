@@ -16,10 +16,11 @@ it('prints help and exits', () => {
   expect(stderr.mock.calls).toMatchInlineSnapshot(`
 Array [
   Array [
-    "jest <command>
+    "processChild.js <command>
 
 Commands:
-  jest submit  Submit report files to Check Run Reporter
+  processChild.js split   Split tests across multiple executors
+  processChild.js submit  Submit report files to Check Run Reporter
 
 Options:
   --version  Show version number                                       [boolean]
