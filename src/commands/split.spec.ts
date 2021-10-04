@@ -1,11 +1,11 @@
-import mockFs from 'mock-fs';
 import nock from 'nock';
+
+import {mockFs} from '../mockfs';
 
 import {split} from './split';
 
 describe('split()', () => {
   beforeEach(() => {
-    console.log('');
     mockFs({
       'src/a.spec.ts': 'contents',
       'src/app.spec.ts': 'contents',
@@ -20,7 +20,6 @@ describe('split()', () => {
 
   beforeEach(() => nock.disableNetConnect());
   afterEach(() => nock.enableNetConnect());
-  afterEach(() => mockFs.restore());
 
   it('splits a group of tests', async () => {
     nock('https://api.check-run-reporter.com')

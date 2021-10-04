@@ -1,10 +1,9 @@
-import mockFs from 'mock-fs';
+import {mockFs} from '../mockfs';
 
 import {multiGlob} from './file';
 
 describe('multiGlob()', () => {
   beforeEach(() => {
-    console.log('');
     mockFs({
       'src/a.spec.ts': 'contents',
       'src/app.spec.ts': 'contents',
@@ -16,8 +15,6 @@ describe('multiGlob()', () => {
       'src/user.spec.ts': 'contents',
     });
   });
-
-  afterEach(() => mockFs.restore());
 
   it('supports exclusions', () => {
     expect(
