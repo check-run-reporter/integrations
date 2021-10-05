@@ -26,6 +26,29 @@ export async function split(
   {tests, label, nodeCount, nodeIndex, token, url}: SplitArgs,
   context: Context
 ) {
+  // This is just here to test the buildkite plugin. The only other option I can
+  // think of is to run a server locally that responds with this and use the
+  // `url` param, but that currently seems like more trouble than its worth for
+  // what I'm trying to test, which is the behavior after the CLI completes and
+  // plugin needs to use its result.
+  if (process.env.BATS_FAKE_SPLIT_RESPONSE) {
+    return {
+      filenames: ['logger.spec.ts', 'user.spec.ts'],
+      inputFilenames: [
+        'src/a.spec.ts',
+        'src/app.spec.ts',
+        'src/b.spec.ts',
+        'src/index.spec.ts',
+        'src/lib.spec.ts',
+        'src/logger.spec.ts',
+        'src/storyshots.spec.ts',
+        'src/user.spec.ts',
+      ],
+      nodeCount: 3,
+      nodeIndex: 2,
+    };
+  }
+
   const {logger} = context;
 
   const filenames = await multiGlob(tests, context);
