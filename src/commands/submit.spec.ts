@@ -1,13 +1,12 @@
-import mockFs from 'mock-fs';
 import nock from 'nock';
 
 import {logger} from '../lib/logger';
+import {mockFs} from '../mockfs';
 
 import {submit} from './submit';
 
 describe('submit()', () => {
   beforeEach(() => {
-    console.log('');
     mockFs({
       'reports/junit/jest.xml': 'XMLXMLXML',
     });
@@ -15,7 +14,6 @@ describe('submit()', () => {
 
   beforeEach(() => nock.disableNetConnect());
   afterEach(() => nock.enableNetConnect());
-  afterEach(() => mockFs.restore());
 
   it('submits reports to check run reporter', async () => {
     nock('https://api.check-run-reporter.com')

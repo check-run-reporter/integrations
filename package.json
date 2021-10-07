@@ -15,7 +15,7 @@
   "scripts": {
     "build": "if command -v gmake 2>/dev/null; then gmake all; else make all; fi",
     "build:types": "tsc --emitDeclarationOnly",
-    "eslint": "eslint ${ESLINT_FORMAT_OPTIONS:-} --ignore --ignore-path .gitignore --ignore-pattern 'integrations/**/example/**'",
+    "eslint": "eslint ${ESLINT_FORMAT_OPTIONS:-} --ignore-path .gitignore",
     "lint": "npm-run-all --continue-on-error --parallel lint:*",
     "lint:changelog": "commitlint --from origin/main --to HEAD",
     "lint:es": "npm run --silent eslint -- .",
@@ -47,7 +47,7 @@
     "@semantic-release/exec": "^6.0.1",
     "@types/glob": "^7.1.4",
     "@types/jest": "^27.0.2",
-    "@types/mock-fs": "^4.13.1",
+    "@types/lodash": "^4.14.175",
     "@types/nock": "^11.1.0",
     "@types/node": "^14.17.17",
     "@typescript-eslint/eslint-plugin": "^4.31.2",
@@ -70,7 +70,7 @@
     "jest-junit": "^12.3.0",
     "lint-staged": "^11.1.2",
     "markdown-toc": "^1.2.0",
-    "mock-fs": "^5.1.1",
+    "memfs": "^3.3.0",
     "nock": "^13.1.3",
     "npm-run-all": "^4.1.5",
     "pkg": "^5.3.2",
@@ -90,6 +90,7 @@
     "ci-info": "^3.2.0",
     "form-data": "^4.0.0",
     "glob": "^7.2.0",
+    "lodash": "^4.17.21",
     "yargs": "^17.1.1"
   },
   "publishConfig": {

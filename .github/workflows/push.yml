@@ -36,10 +36,16 @@ jobs:
           path: dist
       - uses: actions/upload-artifact@v2
         with:
+          name: action-dist
+          path: integrations/action/dist
+      - uses: actions/upload-artifact@v2
+        with:
           name: buildkite-bin
           path: integrations/check-run-reporter-buildkite-plugin/bin
 
   lint:
+    needs:
+      - build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -49,19 +55,23 @@ jobs:
         with:
           node-version: '14'
           cache: 'npm'
+      - uses: actions/download-artifact@v2
+        with:
+          name: action-dist
+          path: integrations/action/dist
       - run: npm i -g npm@7
       - run: npm ci
       - run: npm run lint
         env:
           ESLINT_FORMAT_OPTIONS: '--format json-with-metadata --output-file reports/style/eslint.json'
           TSC_OPTIONS: '| tee reports/style/tsc.log'
-      - uses: check-run-reporter/action@v2.0.0
+      - uses: ./integrations/action
         if: ${{ always() }}
         with:
           token: '62fe22eb-69e1-436d-b85a-82b14847e4cc'
           label: ESLint
           report: 'reports/style/eslint.json'
-      - uses: check-run-reporter/action@v2.0.0
+      - uses: ./integrations/action
         if: ${{ always() }}
         with:
           token: '62fe22eb-69e1-436d-b85a-82b14847e4cc'
@@ -72,20 +82,37 @@ jobs:
     needs:
       - build
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        nodeCount: [2]
+        nodeIndex: [0, 1]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
           cache: 'npm'
+      - uses: actions/download-artifact@v2
+        with:
+          name: action-dist
+          path: integrations/action/dist
       - run: npm i -g npm@7
       - run: npm ci
       - uses: actions/download-artifact@v2
         with:
           name: dist
           path: dist
-      - run: npm test
-      - uses: check-run-reporter/action@v2.0.0
+      - uses: ./integrations/action
+        id: split
+        with:
+          token: '62fe22eb-69e1-436d-b85a-82b14847e4cc'
+          label: Unit Tests
+          nodeCount: ${{ matrix.nodeCount }}
+          nodeIndex: ${{ matrix.nodeIndex }}
+          tests: 'src/**/*.spec.ts'
+      - run: npm test -- ${{ steps.split.outputs.tests }}
+      - uses: ./integrations/action
         if: ${{ always() }}
         with:
           token: '62fe22eb-69e1-436d-b85a-82b14847e4cc'

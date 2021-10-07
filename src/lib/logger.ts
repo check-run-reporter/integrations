@@ -97,3 +97,13 @@ export const logger: Logger = {
   info: logFunctionFactory('info'),
   warn: logFunctionFactory('warn'),
 };
+
+const noop = () => null;
+export const silentLogger: Logger = {
+  debug: noop,
+  error: noop,
+  group: noop,
+  groupEnd: noop,
+  info: noop,
+  warn: noop,
+};
