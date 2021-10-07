@@ -40,4 +40,12 @@ describe('multiGlob()', () => {
       })
     ).toMatchObject(['src/a.spec.ts']);
   });
+
+  it('treats semicolons as additional separators', () => {
+    expect(
+      multiGlob(['src/a*;src/b*;!src/a.s*'], {
+        logger: console,
+      })
+    ).toMatchObject(['src/app.spec.ts', 'src/b.spec.ts']);
+  });
 });
