@@ -35,7 +35,7 @@ should run on this host.
 
 ```yml
 steps:
-    - command: npm test -- $($CHECK_RUN_REPORTER_TESTS_FOR_THIS_AGENT)
+    - command: npm test -- $$CHECK_RUN_REPORTER_TESTS_FOR_THIS_AGENT
       plugins:
           - check-run-reporter/check-run-reporter#v0.0.0:
                 tests: 'src/**/*.spec.ts,!src/storyshots.spec.ts'
