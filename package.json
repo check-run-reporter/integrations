@@ -37,7 +37,7 @@
   "homepage": "https://www.check-run-reporter.com",
   "devDependencies": {
     "@babel/cli": "^7.15.7",
-    "@babel/core": "^7.15.5",
+    "@babel/core": "^7.16.0",
     "@babel/preset-env": "^7.15.6",
     "@babel/preset-typescript": "^7.15.0",
     "@babel/register": "^7.15.3",
@@ -47,7 +47,7 @@
     "@semantic-release/exec": "^6.0.1",
     "@types/glob": "^7.1.4",
     "@types/jest": "^27.0.2",
-    "@types/lodash": "^4.14.175",
+    "@types/lodash": "^4.14.176",
     "@types/nock": "^11.1.0",
     "@types/node": "^14.17.17",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
