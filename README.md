@@ -36,4 +36,4 @@ for the project.
 
 ## License
 
-[MIT](LICENSE) &copy; Ian Remmel, LLC 2019-202
+[MIT](LICENSE) &copy; Ian Remmel, LLC 2019-2021
