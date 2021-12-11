@@ -28,7 +28,6 @@ describe('multiGlob()', () => {
       'src/index.spec.ts',
       'src/lib.spec.ts',
       'src/logger.spec.ts',
-      'src/storyshots.spec.ts',
       'src/user.spec.ts',
     ]);
   });
