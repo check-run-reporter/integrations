@@ -8,6 +8,7 @@ describe('multiGlob()', () => {
       'src/a.spec.ts': 'contents',
       'src/app.spec.ts': 'contents',
       'src/b.spec.ts': 'contents',
+      'src/index.aws.spec.ts': 'contents',
       'src/index.spec.ts': 'contents',
       'src/lib.spec.ts': 'contents',
       'src/logger.spec.ts': 'contents',
@@ -17,11 +18,33 @@ describe('multiGlob()', () => {
   });
 
   it('supports exclusions', () => {
-    expect(
-      multiGlob(['**/*.ts', '!storyshots*'], {
-        logger: console,
-      })
-    ).toMatchObject([
+    const result = multiGlob(['**/*.ts', '!storyshots*'], {
+      logger: console,
+    });
+
+    expect(result).not.toContain(/storyshots/);
+
+    expect(result).toMatchObject([
+      'src/a.spec.ts',
+      'src/app.spec.ts',
+      'src/b.spec.ts',
+      'src/index.aws.spec.ts',
+      'src/index.spec.ts',
+      'src/lib.spec.ts',
+      'src/logger.spec.ts',
+      'src/user.spec.ts',
+    ]);
+  });
+
+  it('supports multiple exclusions', () => {
+    const result = multiGlob(['**/*.ts', '!*storyshots*', '!*aws*'], {
+      logger: console,
+    });
+
+    expect(result).not.toContain(/storyshots/);
+    expect(result).not.toContain(/aws/);
+
+    expect(result).toMatchObject([
       'src/a.spec.ts',
       'src/app.spec.ts',
       'src/b.spec.ts',
