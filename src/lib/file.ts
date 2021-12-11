@@ -33,7 +33,7 @@ export function multiGlob(
         pattern = pattern.slice(1);
       }
       // Find all matching files for this pattern.
-      const matches = glob.sync(pattern);
+      const matches = glob.sync(pattern, {matchBase: true});
       if (matches.length === 0) {
         logger.warn(`Could not find any files matching glob ${pattern}`);
       }
