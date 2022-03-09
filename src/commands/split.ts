@@ -2,7 +2,7 @@ import util from 'util';
 
 import axios from 'axios';
 
-import {client} from '../lib/axios';
+import {client, getRequestId} from '../lib/axios';
 import {multiGlob} from '../lib/file';
 import {Context} from '../lib/types';
 
@@ -83,7 +83,7 @@ export async function split(
         throw err;
       }
 
-      logger.error(`Request ID: ${err.response.headers['x-request-id']}`);
+      logger.error(`Request ID: ${getRequestId(err.response)}`);
       logger.error(util.inspect(err.response.data, {depth: 2}));
     }
 

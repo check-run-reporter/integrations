@@ -4,7 +4,8 @@ import axios from 'axios';
 
 import {Context, Optional} from '../lib/types';
 // eslint-disable-next-line import/no-deprecated
-import {singleStepUpload} from '../lib/upload';
+import {multiStepUpload, singleStepUpload} from '../lib/upload';
+import {getRequestId} from '../lib/axios';
 
 interface SubmitArgs {
   readonly label: Optional<string>;
@@ -22,20 +23,8 @@ export async function submit(input: SubmitArgs, context: Context) {
   const {logger} = context;
 
   try {
-    const {label, report, root, sha, token, url} = input;
     logger.group('Uploading report to Check Run Reporter');
-    logger.info(`Label: ${label}`);
-    logger.info(`Root: ${root}`);
-    logger.info(`SHA: ${sha}`);
-    logger.debug(`URL: ${url}`);
-
-    // eslint-disable-next-line import/no-deprecated
-    const response = await singleStepUpload(input, context);
-
-    logger.info(`Request ID: ${response.headers['x-request-id']}`);
-    logger.info(`Status: ${response.status}`);
-    logger.info(`StatusText: ${response.statusText}`);
-    logger.info(JSON.stringify(response.data, null, 2));
+    await tryMultiStepUploadOrFallbackToSingle(input, context);
   } catch (err) {
     if (axios.isAxiosError(err)) {
       if (!err.response) {
@@ -45,12 +34,41 @@ export async function submit(input: SubmitArgs, context: Context) {
         throw err;
       }
 
-      logger.error(`Request ID: ${err.response.headers['x-request-id']}`);
-      logger.error(util.inspect(err.response.data, {depth: 2}));
+      logger.error(`Request ID: ${getRequestId(err.response)}`);
+      logger.error(
+        `Response Headers: ${util.inspect(err.response.headers, {depth: 2})}`
+      );
+      logger.error(
+        `Response Body: ${util.inspect(err.response.data, {depth: 2})}`
+      );
+      logger.error(`Request URL: ${err.response.config.url}`);
     }
 
     throw err;
   } finally {
     logger.groupEnd();
+  }
+}
+/**
+ * Attempts to use multistep upload, but falls back to the legacy system if it
+ * gets a 404. This _should_ make things future proof so it'll get more
+ * efficient once the new version is released.
+ */
+async function tryMultiStepUploadOrFallbackToSingle(
+  input: SubmitArgs,
+  context: Context
+) {
+  try {
+    return await multiStepUpload(input, context);
+  } catch (err) {
+    if (axios.isAxiosError(err)) {
+      // CI doesn't like safe-access here.
+      if (err.response && err.response.status === 404) {
+        // eslint-disable-next-line import/no-deprecated
+        return await singleStepUpload(input, context);
+      }
+    }
+
+    throw err;
   }
 }
