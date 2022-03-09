@@ -48,7 +48,6 @@ jobs:
                 node-version: '12.x'
             - run: npm ci
             - run: npm test
-              # Please replace "master" with the latest git tag
             - uses: check-run-reporter/action@v0.0.0
               # always run, otherwise you'll only see results for passing builds
               if: ${{ always() }}

@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 /**
- * @file This file produces new version for the buildkite plugin based on the
- * repo versoin. The buildkite plugin was already at version 1 when this repo
+ * @file This file produces new version for the action plugin based on the
+ * repo version. The buildkite plugin was already at version 1 when this repo
  * was created.
  */
 
