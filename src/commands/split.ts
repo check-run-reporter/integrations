@@ -1,12 +1,10 @@
 import util from 'util';
 
 import axios from 'axios';
-import axiosRetry from 'axios-retry';
 
+import {client} from '../lib/axios';
 import {multiGlob} from '../lib/file';
 import {Context} from '../lib/types';
-
-axiosRetry(axios, {retries: 3});
 
 interface SplitArgs {
   /** list of filenames or globs that match all available test files */
@@ -71,7 +69,7 @@ export async function split(
     logger.info(`Tests: ${filenames}`);
     logger.debug(`URL: ${url}`);
 
-    const response = await axios.post(url, params, {
+    const response = await client.post(url, params, {
       auth: {password: token, username: 'token'},
     });
 

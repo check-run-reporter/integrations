@@ -1,14 +1,12 @@
 import fs from 'fs';
 import util from 'util';
 
-import axios from 'axios';
 import FormData from 'form-data';
-import axiosRetry from 'axios-retry';
+import axios from 'axios';
 
 import {multiGlob} from '../lib/file';
 import {Context} from '../lib/types';
-
-axiosRetry(axios, {retries: 3});
+import {client} from '../lib/axios';
 
 type Optional<T> = T | undefined;
 
@@ -50,7 +48,7 @@ export async function submit(
     logger.info(`SHA: ${sha}`);
     logger.debug(`URL: ${url}`);
 
-    const response = await axios.post(url, formData, {
+    const response = await client.post(url, formData, {
       auth: {password: token, username: 'token'},
       headers: {
         ...formData.getHeaders(),
