@@ -6,6 +6,7 @@ branding:
   color: 'orange'
 inputs:
   hostname:
+    default: api.check-run-reporter.com
     description: Internal. Do not use unless directed. Supercedes --url
     required: false
   label:

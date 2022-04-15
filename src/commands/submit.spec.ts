@@ -37,6 +37,7 @@ describe('submit()', () => {
 
     await submit(
       {
+        hostname: 'api.check-run-reporter.com',
         label: 'foo',
         report: ['reports/junit/**/*.xml'],
         root: '/',
@@ -59,6 +60,7 @@ describe('submit()', () => {
 
     await submit(
       {
+        hostname: 'api.check-run-reporter.com',
         label: 'foo',
         report: ['reports/junit/**/*.xml'],
         root: '/',

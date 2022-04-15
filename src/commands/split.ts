@@ -7,6 +7,7 @@ import {multiGlob} from '../lib/file';
 import {Context} from '../lib/types';
 
 interface SplitArgs {
+  readonly hostname: string;
   /** list of filenames or globs that match all available test files */
   readonly tests: readonly string[];
   readonly label: string;
@@ -21,9 +22,19 @@ interface SplitArgs {
  * appropriate to this node.
  */
 export async function split(
-  {tests, label, nodeCount, nodeIndex, token, url}: SplitArgs,
+  {hostname, tests, label, nodeCount, nodeIndex, token, url}: SplitArgs,
   context: Context
 ) {
+  const u = new URL(url);
+  if (hostname !== u.hostname) {
+    u.hostname = hostname;
+    context.logger.info('Overriding hostname', {
+      newUrl: u.href,
+      originalUrl: url,
+    });
+    url = u.href;
+  }
+
   // This is just here to test the buildkite plugin. The only other option I can
   // think of is to run a server locally that responds with this and use the
   // `url` param, but that currently seems like more trouble than its worth for
