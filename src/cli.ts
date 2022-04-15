@@ -18,6 +18,11 @@ export function cli(argv: string[]) {
       'Split tests across multiple executors',
       (y) =>
         y.options({
+          hostname: {
+            default: 'api.check-run-reporter.com',
+            description:
+              'Internal. Do not use unless directed. Supercedes --url',
+          },
           json: {
             default: false,
             description:
@@ -54,11 +59,15 @@ export function cli(argv: string[]) {
               "Mostly here for future use, this let's us specify an alternate endpoint for testing new features. Unless specifically told to do so by support, please don't change this value.",
           },
         }),
-      async ({tests, ...args}) => {
+      async ({hostname, tests, url, ...args}) => {
         const directlyUseOutput = !process.stdout.isTTY;
+
+        const u = new URL(url);
+        u.hostname = hostname;
+
         try {
           const result = await split(
-            {tests: tests.map(String), ...args},
+            {...args, tests: tests.map(String), url: u.toString()},
             {logger: directlyUseOutput ? silentLogger : logger}
           );
           if (directlyUseOutput) {
@@ -89,6 +98,11 @@ export function cli(argv: string[]) {
       'Submit report files to Check Run Reporter',
       (y) =>
         y.options({
+          hostname: {
+            default: 'api.check-run-reporter.com',
+            description:
+              'Internal. Do not use unless directed. Supercedes --url',
+          },
           label: {
             description: 'Label that should appear in the GitHub check run.',
             type: 'string',
@@ -122,11 +136,14 @@ export function cli(argv: string[]) {
               "Mostly here for future use, this let's us specify an alternate endpoint for testing new features. Unless specifically told to do so by support, please don't change this value.",
           },
         }),
-      async ({report, ...args}) => {
+      async ({hostname, report, url, ...args}) => {
+        const u = new URL(url);
+        u.hostname = hostname;
         return submit(
           {
             ...args,
             report: report.map(String),
+            url: u.toString(),
           },
           {logger}
         );
