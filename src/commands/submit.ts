@@ -76,6 +76,7 @@ async function tryMultiStepUploadOrFallbackToSingle(
     if (axios.isAxiosError(err)) {
       // CI doesn't like safe-access here.
       if (err.response && err.response.status === 404) {
+        context.logger.info('Falling back to single step upload');
         // eslint-disable-next-line import/no-deprecated
         return await singleStepUpload(input, context);
       }

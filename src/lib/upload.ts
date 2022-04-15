@@ -79,7 +79,7 @@ export async function multiStepUpload(args: UploadArgs, context: Context) {
   logger.debug(`URL: ${url}/upload`);
 
   const filenames = await multiGlob(report, context);
-  logger.group('Requesing signed urls');
+  logger.group('Requesting signed urls');
   const {keys, urls, signature} = await getSignedUploadUrls(args, filenames);
   logger.groupEnd();
 
