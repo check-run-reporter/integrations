@@ -59,15 +59,12 @@ export function cli(argv: string[]) {
               "Mostly here for future use, this let's us specify an alternate endpoint for testing new features. Unless specifically told to do so by support, please don't change this value.",
           },
         }),
-      async ({hostname, tests, url, ...args}) => {
+      async ({tests, ...args}) => {
         const directlyUseOutput = !process.stdout.isTTY;
-
-        const u = new URL(url);
-        u.hostname = hostname;
 
         try {
           const result = await split(
-            {...args, tests: tests.map(String), url: u.toString()},
+            {...args, tests: tests.map(String)},
             {logger: directlyUseOutput ? silentLogger : logger}
           );
           if (directlyUseOutput) {
@@ -136,14 +133,11 @@ export function cli(argv: string[]) {
               "Mostly here for future use, this let's us specify an alternate endpoint for testing new features. Unless specifically told to do so by support, please don't change this value.",
           },
         }),
-      async ({hostname, report, url, ...args}) => {
-        const u = new URL(url);
-        u.hostname = hostname;
+      async ({report, ...args}) => {
         return submit(
           {
             ...args,
             report: report.map(String),
-            url: u.toString(),
           },
           {logger}
         );

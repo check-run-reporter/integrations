@@ -8,6 +8,7 @@ import {multiStepUpload, singleStepUpload} from '../lib/upload';
 import {getRequestId} from '../lib/axios';
 
 interface SubmitArgs {
+  readonly hostname: string;
   readonly label: Optional<string>;
   readonly report: readonly string[];
   readonly root: string;
@@ -55,15 +56,27 @@ export async function submit(input: SubmitArgs, context: Context) {
  * efficient once the new version is released.
  */
 async function tryMultiStepUploadOrFallbackToSingle(
-  input: SubmitArgs,
+  {hostname, url, ...rest}: SubmitArgs,
   context: Context
 ) {
+  const u = new URL(url);
+  if (hostname !== u.hostname) {
+    u.hostname = hostname;
+    context.logger.info('Overriding hostname', {
+      newUrl: u.href,
+      originalUrl: url,
+    });
+    url = u.href;
+  }
+  const input = {url, ...rest};
+
   try {
     return await multiStepUpload(input, context);
   } catch (err) {
     if (axios.isAxiosError(err)) {
       // CI doesn't like safe-access here.
       if (err.response && err.response.status === 404) {
+        context.logger.info('Falling back to single step upload');
         // eslint-disable-next-line import/no-deprecated
         return await singleStepUpload(input, context);
       }

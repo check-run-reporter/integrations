@@ -42,6 +42,7 @@ describe('split()', () => {
 
     const result = await split(
       {
+        hostname: 'api.check-run-reporter.com',
         label: 'foo',
         nodeCount: 3,
         nodeIndex: 2,
