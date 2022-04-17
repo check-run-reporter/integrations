@@ -104,8 +104,8 @@ export async function getSignedUploadUrls(
     {filenames, label, root, sha},
     {
       auth: {password: token, username: 'token'},
-
       maxContentLength: Infinity,
+      timeout: 30000,
     }
   );
 
