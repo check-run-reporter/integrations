@@ -151,9 +151,10 @@ async function main() {
     core.getInput('label') ||
     `${github.context.workflow} / ${github.context.job}`;
 
+  const hostname = core.getInput('hostname');
   const token = core.getInput('token');
 
-  const client = makeClient();
+  const client = makeClient({hostname});
 
   const tests = core.getInput('tests');
   if (tests) {

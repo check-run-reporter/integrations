@@ -20,8 +20,8 @@ export function cli(argv: string[]) {
       (y) =>
         y.options({
           hostname: {
-            default: 'api.check-run-reporter.com',
             description: 'Internal. Do not use unless directed.',
+            type: 'string',
           },
           json: {
             default: false,
@@ -54,14 +54,14 @@ export function cli(argv: string[]) {
             type: 'string',
           },
         }),
-      async ({tests, ...args}) => {
+      async ({hostname, tests, ...args}) => {
         const directlyUseOutput = !process.stdout.isTTY;
 
         try {
           const result = await split(
             {...args, tests: tests.map(String)},
             {
-              client: makeClient(),
+              client: makeClient({hostname}),
               logger: directlyUseOutput ? silentLogger : logger,
             }
           );
@@ -94,8 +94,8 @@ export function cli(argv: string[]) {
       (y) =>
         y.options({
           hostname: {
-            default: 'api.check-run-reporter.com',
             description: 'Internal. Do not use unless directed.',
+            type: 'string',
           },
           label: {
             description: 'Label that should appear in the GitHub check run.',
@@ -125,13 +125,13 @@ export function cli(argv: string[]) {
             type: 'string',
           },
         }),
-      async ({report, ...args}) => {
+      async ({hostname, report, ...args}) => {
         return submit(
           {
             ...args,
             report: report.map(String),
           },
-          {client: makeClient(), logger}
+          {client: makeClient({hostname}), logger}
         );
       }
     )

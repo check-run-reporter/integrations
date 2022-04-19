@@ -1,7 +1,7 @@
 import 'axios-debug-log';
 
 import axiosRetry from 'axios-retry';
-import axios, {AxiosResponse} from 'axios';
+import axios, {AxiosInstance, AxiosResponse} from 'axios';
 import ci from 'ci-info';
 
 import pkg from '../../package.json';
@@ -12,9 +12,11 @@ const {version} = pkg;
 /**
  * Creates a new http client with configuration
  */
-export function makeClient() {
+export function makeClient({hostname}: {hostname?: string}): AxiosInstance {
+  // Do not use ?? here in case hostname is an empty string
+  hostname = hostname || HOSTNAME;
   const client = axios.create({
-    baseURL: new URL(BASEPATH, `https://${HOSTNAME}`).toString(),
+    baseURL: new URL(BASEPATH, `https://${hostname}`).toString(),
     headers: {
       'user-agent': [
         `crr/${version}`,
