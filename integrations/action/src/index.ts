@@ -12,6 +12,8 @@ import axios from 'axios';
 
 import {submit} from '../../../src';
 import {split} from '../../../src/commands/split';
+import {client} from '../../../src/lib/axios';
+import {Context} from '../../../src/lib/types';
 
 const logger = {
   debug: core.debug.bind(core),
@@ -98,7 +100,10 @@ interface DoSplitInput {
 /**
  * Wrapper around split to adapt it for github actions
  */
-async function doSplit({hostname, label, tests, token, url}: DoSplitInput) {
+async function doSplit(
+  {hostname, label, tests, token, url}: DoSplitInput,
+  {client}: Context
+) {
   const nodeCount = core.getInput('nodeCount');
   const nodeIndex = core.getInput('nodeIndex');
 
@@ -121,7 +126,7 @@ async function doSplit({hostname, label, tests, token, url}: DoSplitInput) {
         token,
         url,
       },
-      {logger}
+      {client, logger}
     );
 
     core.info(
@@ -159,13 +164,19 @@ async function main() {
 
   const tests = core.getInput('tests');
   if (tests) {
-    return await doSplit({
-      hostname,
-      label,
-      tests,
-      token,
-      url: `${url}/split`,
-    });
+    return await doSplit(
+      {
+        hostname,
+        label,
+        tests,
+        token,
+        url: `${url}/split`,
+      },
+      {
+        client,
+        logger,
+      }
+    );
   }
 
   const root = determineRoot();
@@ -184,6 +195,7 @@ async function main() {
       url: `${url}/submissions`,
     },
     {
+      client,
       logger,
     }
   );

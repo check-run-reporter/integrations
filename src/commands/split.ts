@@ -2,7 +2,7 @@ import util from 'util';
 
 import axios from 'axios';
 
-import {client, getRequestId} from '../lib/axios';
+import {getRequestId} from '../lib/axios';
 import {multiGlob} from '../lib/file';
 import {Context} from '../lib/types';
 
@@ -58,7 +58,7 @@ export async function split(
     };
   }
 
-  const {logger} = context;
+  const {client, logger} = context;
 
   const filenames = await multiGlob(tests, context);
 

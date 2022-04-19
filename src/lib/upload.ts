@@ -2,7 +2,7 @@ import fs from 'fs';
 
 import FormData from 'form-data';
 
-import {client, getRequestId} from './axios';
+import {getRequestId} from './axios';
 import {multiGlob} from './file';
 import {Context, Optional} from './types';
 
@@ -27,7 +27,7 @@ export async function singleStepUpload(
   {label, report, root, sha, token, url}: UploadArgs,
   context: Context
 ) {
-  const {logger} = context;
+  const {client, logger} = context;
 
   logger.info(`Label: ${label}`);
   logger.info(`Root: ${root}`);
@@ -80,22 +80,27 @@ export async function multiStepUpload(args: UploadArgs, context: Context) {
 
   const filenames = await multiGlob(report, context);
   logger.group('Requesting signed urls');
-  const {keys, urls, signature} = await getSignedUploadUrls(args, filenames);
+  const {keys, urls, signature} = await getSignedUploadUrls(
+    args,
+    filenames,
+    context
+  );
   logger.groupEnd();
 
   logger.group('Uploading reports');
-  await uploadToSignedUrls(filenames, urls);
+  await uploadToSignedUrls(filenames, urls, context);
   logger.groupEnd();
 
   logger.group('Finalizing upload');
-  await finishMultistepUpload(args, keys, signature);
+  await finishMultistepUpload(args, keys, signature, context);
   logger.groupEnd();
 }
 
 /** Fetches signed URLs */
 export async function getSignedUploadUrls(
   args: UploadArgs,
-  filenames: readonly string[]
+  filenames: readonly string[],
+  {client}: Context
 ): Promise<{keys: string[]; signature: string; urls: Record<string, string>}> {
   const {label, root, sha, token, url} = args;
 
@@ -115,7 +120,8 @@ export async function getSignedUploadUrls(
 /** Uploads directly to S3. */
 export async function uploadToSignedUrls(
   filenames: readonly string[],
-  urls: URLs
+  urls: URLs,
+  {client}: Context
 ) {
   for (const filename of filenames) {
     const stream = fs.createReadStream(filename);
@@ -134,7 +140,8 @@ export async function uploadToSignedUrls(
 export async function finishMultistepUpload(
   args: UploadArgs,
   keys: readonly string[],
-  signature: string
+  signature: string,
+  {client}: Context
 ) {
   const {label, root, sha, token, url} = args;
 

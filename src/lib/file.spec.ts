@@ -1,5 +1,6 @@
 import {mockFs} from '../mockfs';
 
+import {client} from './axios';
 import {multiGlob} from './file';
 
 describe('multiGlob()', () => {
@@ -19,6 +20,7 @@ describe('multiGlob()', () => {
 
   it('supports exclusions', () => {
     const result = multiGlob(['**/*.ts', '!storyshots*'], {
+      client,
       logger: console,
     });
 
@@ -38,6 +40,7 @@ describe('multiGlob()', () => {
 
   it('supports multiple exclusions', () => {
     const result = multiGlob(['**/*.ts', '!*storyshots*', '!*aws*'], {
+      client,
       logger: console,
     });
 
@@ -58,6 +61,7 @@ describe('multiGlob()', () => {
   it('dedupes matches', () => {
     expect(
       multiGlob(['**/a.*.ts', '**/a.*.ts'], {
+        client,
         logger: console,
       })
     ).toMatchObject(['src/a.spec.ts']);
@@ -66,6 +70,7 @@ describe('multiGlob()', () => {
   it('treats semicolons as additional separators', () => {
     expect(
       multiGlob(['src/a*;src/b*;!src/a.s*'], {
+        client,
         logger: console,
       })
     ).toMatchObject(['src/app.spec.ts', 'src/b.spec.ts']);
