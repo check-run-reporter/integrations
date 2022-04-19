@@ -6,7 +6,7 @@ import {hideBin} from 'yargs/helpers';
 
 import {split} from './commands/split';
 import {submit} from './commands/submit';
-import {client} from './lib/axios';
+import {makeClient} from './lib/axios';
 import {logger, silentLogger} from './lib/logger';
 
 /**
@@ -66,7 +66,10 @@ export function cli(argv: string[]) {
         try {
           const result = await split(
             {...args, tests: tests.map(String)},
-            {client, logger: directlyUseOutput ? silentLogger : logger}
+            {
+              client: makeClient(),
+              logger: directlyUseOutput ? silentLogger : logger,
+            }
           );
           if (directlyUseOutput) {
             console.log(result.filenames.join('\n'));
@@ -140,7 +143,7 @@ export function cli(argv: string[]) {
             ...args,
             report: report.map(String),
           },
-          {client, logger}
+          {client: makeClient(), logger}
         );
       }
     )

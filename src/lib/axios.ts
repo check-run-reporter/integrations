@@ -8,18 +8,24 @@ import pkg from '../../package.json';
 
 const {version} = pkg;
 
-export const client = axios.create({
-  headers: {
-    'user-agent': [
-      `crr/${version}`,
-      ci.name,
-      typeof ci.isPR === 'boolean' ? `(PR: ${ci.isPR})` : null,
-    ]
-      .filter(Boolean)
-      .join(' '),
-  },
-});
-axiosRetry(client, {retries: 3});
+/**
+ * Creates a new http client with configuration
+ */
+export function makeClient() {
+  const client = axios.create({
+    headers: {
+      'user-agent': [
+        `crr/${version}`,
+        ci.name,
+        typeof ci.isPR === 'boolean' ? `(PR: ${ci.isPR})` : null,
+      ]
+        .filter(Boolean)
+        .join(' '),
+    },
+  });
+  axiosRetry(client, {retries: 3});
+  return client;
+}
 
 /**
  * extract the request id from the response object

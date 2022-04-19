@@ -12,7 +12,7 @@ import axios from 'axios';
 
 import {submit} from '../../../src';
 import {split} from '../../../src/commands/split';
-import {client} from '../../../src/lib/axios';
+import {makeClient} from '../../../src/lib/axios';
 import {Context} from '../../../src/lib/types';
 
 const logger = {
@@ -161,6 +161,8 @@ async function main() {
   const hostname = core.getInput('hostname');
   const token = core.getInput('token');
   const url = core.getInput('url');
+
+  const client = makeClient();
 
   const tests = core.getInput('tests');
   if (tests) {
