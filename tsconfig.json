@@ -10,7 +10,7 @@
     "outDir": "dist/types",
     "resolveJsonModule": true,
     "strict": true,
-    "target": "es2020", // node 14
+    "target": "es2021", // node 16
     "types": [
       "jest",
       "node"
