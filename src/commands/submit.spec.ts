@@ -1,7 +1,6 @@
 import nock from 'nock';
 
-import {client} from '../lib/axios';
-import {logger} from '../lib/logger';
+import {makeTestContext} from '../test/context';
 import {mockFs} from '../test/mockfs';
 
 import {submit} from './submit';
@@ -46,7 +45,7 @@ describe('submit()', () => {
         token: 'FAKE TOKEN',
         url: 'https://api.check-run-reporter.com/api/v1/submissions',
       },
-      {client, logger}
+      makeTestContext()
     );
   });
 
@@ -69,7 +68,7 @@ describe('submit()', () => {
         token: 'FAKE TOKEN',
         url: 'https://api.check-run-reporter.com/api/v1/submissions',
       },
-      {client, logger}
+      makeTestContext()
     );
   });
 });

@@ -1,6 +1,6 @@
 import nock from 'nock';
 
-import {client} from '../lib/axios';
+import {makeTestContext} from '../test/context';
 import {mockFs} from '../test/mockfs';
 
 import {split} from './split';
@@ -51,7 +51,7 @@ describe('split()', () => {
         token: 'FAKE TOKEN',
         url: 'https://api.check-run-reporter.com/api/v1/split',
       },
-      {client, logger: console}
+      makeTestContext()
     );
 
     expect(result).toMatchObject({
