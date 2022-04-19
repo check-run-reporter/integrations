@@ -1,4 +1,5 @@
-import {mockFs} from '../mockfs';
+import {makeTestContext} from '../test/context';
+import {mockFs} from '../test/mockfs';
 
 import {multiGlob} from './file';
 
@@ -18,9 +19,7 @@ describe('multiGlob()', () => {
   });
 
   it('supports exclusions', () => {
-    const result = multiGlob(['**/*.ts', '!storyshots*'], {
-      logger: console,
-    });
+    const result = multiGlob(['**/*.ts', '!storyshots*'], makeTestContext());
 
     expect(result).not.toContain(/storyshots/);
 
@@ -37,9 +36,10 @@ describe('multiGlob()', () => {
   });
 
   it('supports multiple exclusions', () => {
-    const result = multiGlob(['**/*.ts', '!*storyshots*', '!*aws*'], {
-      logger: console,
-    });
+    const result = multiGlob(
+      ['**/*.ts', '!*storyshots*', '!*aws*'],
+      makeTestContext()
+    );
 
     expect(result).not.toContain(/storyshots/);
     expect(result).not.toContain(/aws/);
@@ -57,17 +57,13 @@ describe('multiGlob()', () => {
 
   it('dedupes matches', () => {
     expect(
-      multiGlob(['**/a.*.ts', '**/a.*.ts'], {
-        logger: console,
-      })
+      multiGlob(['**/a.*.ts', '**/a.*.ts'], makeTestContext())
     ).toMatchObject(['src/a.spec.ts']);
   });
 
   it('treats semicolons as additional separators', () => {
     expect(
-      multiGlob(['src/a*;src/b*;!src/a.s*'], {
-        logger: console,
-      })
+      multiGlob(['src/a*;src/b*;!src/a.s*'], makeTestContext())
     ).toMatchObject(['src/app.spec.ts', 'src/b.spec.ts']);
   });
 });

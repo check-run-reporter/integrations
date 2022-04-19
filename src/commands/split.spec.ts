@@ -1,6 +1,7 @@
 import nock from 'nock';
 
-import {mockFs} from '../mockfs';
+import {makeTestContext} from '../test/context';
+import {mockFs} from '../test/mockfs';
 
 import {split} from './split';
 
@@ -42,15 +43,13 @@ describe('split()', () => {
 
     const result = await split(
       {
-        hostname: 'api.check-run-reporter.com',
         label: 'foo',
         nodeCount: 3,
         nodeIndex: 2,
         tests: ['src/**/*.spec.ts', '!src/storyshots.spec.ts'],
         token: 'FAKE TOKEN',
-        url: 'https://api.check-run-reporter.com/api/v1/split',
       },
-      {logger: console}
+      makeTestContext()
     );
 
     expect(result).toMatchObject({

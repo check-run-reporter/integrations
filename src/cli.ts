@@ -6,6 +6,7 @@ import {hideBin} from 'yargs/helpers';
 
 import {split} from './commands/split';
 import {submit} from './commands/submit';
+import {makeClient} from './lib/axios';
 import {logger, silentLogger} from './lib/logger';
 
 /**
@@ -19,9 +20,8 @@ export function cli(argv: string[]) {
       (y) =>
         y.options({
           hostname: {
-            default: 'api.check-run-reporter.com',
-            description:
-              'Internal. Do not use unless directed. Supercedes --url',
+            description: 'Internal. Do not use unless directed.',
+            type: 'string',
           },
           json: {
             default: false,
@@ -53,19 +53,17 @@ export function cli(argv: string[]) {
             description: 'Repo token with which to authenticate the upload.',
             type: 'string',
           },
-          url: {
-            default: 'https://api.check-run-reporter.com/api/v1/split',
-            description:
-              "Mostly here for future use, this let's us specify an alternate endpoint for testing new features. Unless specifically told to do so by support, please don't change this value.",
-          },
         }),
-      async ({tests, ...args}) => {
+      async ({hostname, tests, ...args}) => {
         const directlyUseOutput = !process.stdout.isTTY;
 
         try {
           const result = await split(
             {...args, tests: tests.map(String)},
-            {logger: directlyUseOutput ? silentLogger : logger}
+            {
+              client: makeClient({hostname}),
+              logger: directlyUseOutput ? silentLogger : logger,
+            }
           );
           if (directlyUseOutput) {
             console.log(result.filenames.join('\n'));
@@ -96,9 +94,8 @@ export function cli(argv: string[]) {
       (y) =>
         y.options({
           hostname: {
-            default: 'api.check-run-reporter.com',
-            description:
-              'Internal. Do not use unless directed. Supercedes --url',
+            description: 'Internal. Do not use unless directed.',
+            type: 'string',
           },
           label: {
             description: 'Label that should appear in the GitHub check run.',
@@ -127,19 +124,14 @@ export function cli(argv: string[]) {
             description: 'Repo token with which to authenticate the upload.',
             type: 'string',
           },
-          url: {
-            default: 'https://api.check-run-reporter.com/api/v1/submissions',
-            description:
-              "Mostly here for future use, this let's us specify an alternate endpoint for testing new features. Unless specifically told to do so by support, please don't change this value.",
-          },
         }),
-      async ({report, ...args}) => {
+      async ({hostname, report, ...args}) => {
         return submit(
           {
             ...args,
             report: report.map(String),
           },
-          {logger}
+          {client: makeClient({hostname}), logger}
         );
       }
     )

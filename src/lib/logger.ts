@@ -1,4 +1,4 @@
-import ci, {GITHUB_ACTIONS} from 'ci-info';
+import ci from 'ci-info';
 
 type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 
@@ -29,7 +29,7 @@ const mappings = {
  * @param input input to sanitize into a string
  * @see https://github.com/actions/toolkit/blob/ea81280a4d48fb0308d40f8f12ae00d117f8acb9/packages/core/src/utils.ts#L11-L18
  */
-export function toCommandValue(input: any): string {
+export function toCommandValue(input: unknown): string {
   if (input === null || input === undefined) {
     return '';
   } else if (typeof input === 'string' || input instanceof String) {
@@ -42,7 +42,7 @@ export function toCommandValue(input: any): string {
  * GitHub Action Helper
  * @see https://github.com/actions/toolkit/blob/ea81280a4d48fb0308d40f8f12ae00d117f8acb9/packages/core/src/command.ts#L80-L85
  */
-function escapeData(s: any): string {
+function escapeData(s: unknown): string {
   return toCommandValue(s)
     .replace(/%/g, '%25')
     .replace(/\r/g, '%0D')

@@ -1,7 +1,7 @@
 import nock from 'nock';
 
-import {logger} from '../lib/logger';
-import {mockFs} from '../mockfs';
+import {makeTestContext} from '../test/context';
+import {mockFs} from '../test/mockfs';
 
 import {submit} from './submit';
 
@@ -37,15 +37,13 @@ describe('submit()', () => {
 
     await submit(
       {
-        hostname: 'api.check-run-reporter.com',
         label: 'foo',
         report: ['reports/junit/**/*.xml'],
         root: '/',
         sha: '40923a72ddf9eefef938355fa96246607c706f6c',
         token: 'FAKE TOKEN',
-        url: 'https://api.check-run-reporter.com/api/v1/submissions',
       },
-      {logger}
+      makeTestContext()
     );
   });
 
@@ -60,15 +58,13 @@ describe('submit()', () => {
 
     await submit(
       {
-        hostname: 'api.check-run-reporter.com',
         label: 'foo',
         report: ['reports/junit/**/*.xml'],
         root: '/',
         sha: '40923a72ddf9eefef938355fa96246607c706f6c',
         token: 'FAKE TOKEN',
-        url: 'https://api.check-run-reporter.com/api/v1/submissions',
       },
-      {logger}
+      makeTestContext()
     );
   });
 });

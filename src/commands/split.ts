@@ -2,19 +2,18 @@ import util from 'util';
 
 import axios from 'axios';
 
-import {client, getRequestId} from '../lib/axios';
+import {getRequestId} from '../lib/axios';
 import {multiGlob} from '../lib/file';
 import {Context} from '../lib/types';
+import {PATH_SPLIT} from '../constants';
 
 interface SplitArgs {
-  readonly hostname: string;
   /** list of filenames or globs that match all available test files */
   readonly tests: readonly string[];
   readonly label: string;
   readonly nodeCount: number;
   readonly nodeIndex: number;
   readonly token: string;
-  readonly url: string;
 }
 
 /**
@@ -22,24 +21,14 @@ interface SplitArgs {
  * appropriate to this node.
  */
 export async function split(
-  {hostname, tests, label, nodeCount, nodeIndex, token, url}: SplitArgs,
+  {tests, label, nodeCount, nodeIndex, token}: SplitArgs,
   context: Context
 ) {
-  const u = new URL(url);
-  if (hostname !== u.hostname) {
-    u.hostname = hostname;
-    context.logger.info('Overriding hostname', {
-      newUrl: u.href,
-      originalUrl: url,
-    });
-    url = u.href;
-  }
-
   // This is just here to test the buildkite plugin. The only other option I can
   // think of is to run a server locally that responds with this and use the
-  // `url` param, but that currently seems like more trouble than its worth for
-  // what I'm trying to test, which is the behavior after the CLI completes and
-  // plugin needs to use its result.
+  // `hostname` param, but that currently seems like more trouble than its worth
+  // for what I'm trying to test, which is the behavior after the CLI completes
+  // and plugin needs to use its result.
   if (process.env.BATS_FAKE_SPLIT_RESPONSE) {
     return {
       filenames: ['logger.spec.ts', 'user.spec.ts'],
@@ -58,7 +47,7 @@ export async function split(
     };
   }
 
-  const {logger} = context;
+  const {client, logger} = context;
 
   const filenames = await multiGlob(tests, context);
 
@@ -78,9 +67,8 @@ export async function split(
     );
     logger.info(`Label: ${label}`);
     logger.info(`Tests: ${filenames}`);
-    logger.debug(`URL: ${url}`);
 
-    const response = await client.post(url, params, {
+    const response = await client.post(PATH_SPLIT, params, {
       auth: {password: token, username: 'token'},
     });
 

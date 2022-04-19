@@ -8,13 +8,11 @@ import {multiStepUpload, singleStepUpload} from '../lib/upload';
 import {getRequestId} from '../lib/axios';
 
 interface SubmitArgs {
-  readonly hostname: string;
   readonly label: Optional<string>;
   readonly report: readonly string[];
   readonly root: string;
   readonly sha: string;
   readonly token: string;
-  readonly url: string;
 }
 
 /**
@@ -56,20 +54,9 @@ export async function submit(input: SubmitArgs, context: Context) {
  * efficient once the new version is released.
  */
 async function tryMultiStepUploadOrFallbackToSingle(
-  {hostname, url, ...rest}: SubmitArgs,
+  input: SubmitArgs,
   context: Context
 ) {
-  const u = new URL(url);
-  if (hostname !== u.hostname) {
-    u.hostname = hostname;
-    context.logger.info('Overriding hostname', {
-      newUrl: u.href,
-      originalUrl: url,
-    });
-    url = u.href;
-  }
-  const input = {url, ...rest};
-
   try {
     return await multiStepUpload(input, context);
   } catch (err) {
