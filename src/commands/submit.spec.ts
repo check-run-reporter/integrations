@@ -2,7 +2,7 @@ import nock from 'nock';
 
 import {client} from '../lib/axios';
 import {logger} from '../lib/logger';
-import {mockFs} from '../mockfs';
+import {mockFs} from '../test/mockfs';
 
 import {submit} from './submit';
 

@@ -1,4 +1,4 @@
-import {mockFs} from '../mockfs';
+import {mockFs} from '../test/mockfs';
 
 import {client} from './axios';
 import {multiGlob} from './file';

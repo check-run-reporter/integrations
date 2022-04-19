@@ -1,7 +1,7 @@
 import nock from 'nock';
 
 import {client} from '../lib/axios';
-import {mockFs} from '../mockfs';
+import {mockFs} from '../test/mockfs';
 
 import {split} from './split';
 
