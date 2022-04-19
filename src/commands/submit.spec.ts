@@ -37,13 +37,11 @@ describe('submit()', () => {
 
     await submit(
       {
-        hostname: 'api.check-run-reporter.com',
         label: 'foo',
         report: ['reports/junit/**/*.xml'],
         root: '/',
         sha: '40923a72ddf9eefef938355fa96246607c706f6c',
         token: 'FAKE TOKEN',
-        url: 'https://api.check-run-reporter.com/api/v1/submissions',
       },
       makeTestContext()
     );
@@ -60,13 +58,11 @@ describe('submit()', () => {
 
     await submit(
       {
-        hostname: 'api.check-run-reporter.com',
         label: 'foo',
         report: ['reports/junit/**/*.xml'],
         root: '/',
         sha: '40923a72ddf9eefef938355fa96246607c706f6c',
         token: 'FAKE TOKEN',
-        url: 'https://api.check-run-reporter.com/api/v1/submissions',
       },
       makeTestContext()
     );

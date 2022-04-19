@@ -21,8 +21,7 @@ export function cli(argv: string[]) {
         y.options({
           hostname: {
             default: 'api.check-run-reporter.com',
-            description:
-              'Internal. Do not use unless directed. Supercedes --url',
+            description: 'Internal. Do not use unless directed.',
           },
           json: {
             default: false,
@@ -53,11 +52,6 @@ export function cli(argv: string[]) {
             demandOption: true,
             description: 'Repo token with which to authenticate the upload.',
             type: 'string',
-          },
-          url: {
-            default: 'https://api.check-run-reporter.com/api/v1/split',
-            description:
-              "Mostly here for future use, this let's us specify an alternate endpoint for testing new features. Unless specifically told to do so by support, please don't change this value.",
           },
         }),
       async ({tests, ...args}) => {
@@ -101,8 +95,7 @@ export function cli(argv: string[]) {
         y.options({
           hostname: {
             default: 'api.check-run-reporter.com',
-            description:
-              'Internal. Do not use unless directed. Supercedes --url',
+            description: 'Internal. Do not use unless directed.',
           },
           label: {
             description: 'Label that should appear in the GitHub check run.',
@@ -130,11 +123,6 @@ export function cli(argv: string[]) {
             demandOption: true,
             description: 'Repo token with which to authenticate the upload.',
             type: 'string',
-          },
-          url: {
-            default: 'https://api.check-run-reporter.com/api/v1/submissions',
-            description:
-              "Mostly here for future use, this let's us specify an alternate endpoint for testing new features. Unless specifically told to do so by support, please don't change this value.",
           },
         }),
       async ({report, ...args}) => {

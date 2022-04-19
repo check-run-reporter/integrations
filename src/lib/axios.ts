@@ -5,6 +5,7 @@ import axios, {AxiosResponse} from 'axios';
 import ci from 'ci-info';
 
 import pkg from '../../package.json';
+import {BASEPATH, HOSTNAME} from '../constants';
 
 const {version} = pkg;
 
@@ -13,6 +14,7 @@ const {version} = pkg;
  */
 export function makeClient() {
   const client = axios.create({
+    baseURL: new URL(BASEPATH, `https://${HOSTNAME}`).toString(),
     headers: {
       'user-agent': [
         `crr/${version}`,

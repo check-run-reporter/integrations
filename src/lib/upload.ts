@@ -2,6 +2,8 @@ import fs from 'fs';
 
 import FormData from 'form-data';
 
+import {PATH_MULTI_STEP_UPLOAD, PATH_SINGLE_STEP_UPLOAD} from '../constants';
+
 import {getRequestId} from './axios';
 import {multiGlob} from './file';
 import {Context, Optional} from './types';
@@ -12,7 +14,6 @@ interface UploadArgs {
   readonly root: string;
   readonly sha: string;
   readonly token: string;
-  readonly url: string;
 }
 
 type URLs = Record<string, string>;
@@ -24,7 +25,7 @@ type URLs = Record<string, string>;
  * @deprecated use multiStepUpload instead
  */
 export async function singleStepUpload(
-  {label, report, root, sha, token, url}: UploadArgs,
+  {label, report, root, sha, token}: UploadArgs,
   context: Context
 ) {
   const {client, logger} = context;
@@ -32,7 +33,6 @@ export async function singleStepUpload(
   logger.info(`Label: ${label}`);
   logger.info(`Root: ${root}`);
   logger.info(`SHA: ${sha}`);
-  logger.debug(`URL: ${url}`);
 
   const filenames = await multiGlob(report, context);
 
@@ -47,7 +47,7 @@ export async function singleStepUpload(
   formData.append('root', root);
   formData.append('sha', sha);
 
-  const response = await client.post(url, formData, {
+  const response = await client.post(PATH_SINGLE_STEP_UPLOAD, formData, {
     auth: {password: token, username: 'token'},
     headers: {
       ...formData.getHeaders(),
@@ -71,12 +71,11 @@ export async function singleStepUpload(
 export async function multiStepUpload(args: UploadArgs, context: Context) {
   const {logger} = context;
 
-  const {label, report, root, sha, url} = args;
+  const {label, report, root, sha} = args;
 
   logger.info(`Label: ${label}`);
   logger.info(`Root: ${root}`);
   logger.info(`SHA: ${sha}`);
-  logger.debug(`URL: ${url}/upload`);
 
   const filenames = await multiGlob(report, context);
   logger.group('Requesting signed urls');
@@ -102,10 +101,10 @@ export async function getSignedUploadUrls(
   filenames: readonly string[],
   {client}: Context
 ): Promise<{keys: string[]; signature: string; urls: Record<string, string>}> {
-  const {label, root, sha, token, url} = args;
+  const {label, root, sha, token} = args;
 
   const response = await client.post(
-    `${url}/upload`,
+    PATH_MULTI_STEP_UPLOAD,
     {filenames, label, root, sha},
     {
       auth: {password: token, username: 'token'},
@@ -143,10 +142,10 @@ export async function finishMultistepUpload(
   signature: string,
   {client}: Context
 ) {
-  const {label, root, sha, token, url} = args;
+  const {label, root, sha, token} = args;
 
   const response = await client.patch(
-    `${url}/upload`,
+    PATH_MULTI_STEP_UPLOAD,
     {
       keys,
       label,
