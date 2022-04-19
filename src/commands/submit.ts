@@ -62,7 +62,10 @@ async function tryMultiStepUploadOrFallbackToSingle(
   } catch (err) {
     if (axios.isAxiosError(err)) {
       // CI doesn't like safe-access here.
-      if (err.response && err.response.status === 404) {
+      if (
+        (err.response && err.response.status === 404) ||
+        err.code === 'ECONNABORTED'
+      ) {
         context.logger.info(
           'Received 404 trying to get signed URLs. Assuming feature is notn released yet and falling back to single step upload',
           {err}
