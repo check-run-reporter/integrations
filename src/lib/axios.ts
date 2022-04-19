@@ -1,3 +1,5 @@
+import 'axios-debug-log';
+
 import axiosRetry from 'axios-retry';
 import axios, {AxiosResponse} from 'axios';
 import ci from 'ci-info';
