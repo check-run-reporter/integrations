@@ -17,10 +17,10 @@
   },
   "homepage": "https://www.check-run-reporter.com",
   "dependencies": {
-    "@actions/core": "^1.5.0",
-    "@actions/github": "^5.0.0",
-    "@actions/glob": "^0.2.0",
-    "@octokit/webhooks-types": "^4.17.1",
+    "@actions/core": "^1.8.0",
+    "@actions/github": "^5.0.1",
+    "@actions/glob": "^0.2.1",
+    "@octokit/webhooks-types": "^4.18.0",
     "axios": "^0.24.0"
   }
 }
