@@ -55,7 +55,7 @@ jobs:
         with:
           node-version: '14'
           cache: 'npm'
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v3
         with:
           name: action-dist
           path: integrations/action/dist
@@ -93,13 +93,13 @@ jobs:
         with:
           node-version: '14'
           cache: 'npm'
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v3
         with:
           name: action-dist
           path: integrations/action/dist
       - run: npm i -g npm@7
       - run: npm ci
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v3
         with:
           name: dist
           path: dist
@@ -135,7 +135,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           submodules: recursive
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v3
         with:
           name: buildkite-bin
           path: integrations/check-run-reporter-buildkite-plugin/bin
