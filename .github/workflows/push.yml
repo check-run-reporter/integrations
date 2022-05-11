@@ -30,15 +30,15 @@ jobs:
       - run: npm i -g npm@7
       - run: npm ci
       - run: npm run build
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: dist
           path: dist
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: action-dist
           path: integrations/action/dist
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: buildkite-bin
           path: integrations/check-run-reporter-buildkite-plugin/bin
