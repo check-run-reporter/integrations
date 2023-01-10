@@ -12,7 +12,7 @@ was driven by environment variables. Workflows were configured with HCL instead
 of Yaml.
 
 Times have changed. V2 is completely rewritten in TypeScript. Rather than doing
-everyting with bash and curl, we now get the control flow of a modern language
+everything with bash and curl, we now get the control flow of a modern language
 and we can rely on actions.yml to typecheck our configuration instead of just
 hoping environment variables have been set.
 
