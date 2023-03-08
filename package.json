@@ -87,7 +87,7 @@
     "axios": "^0.24.0",
     "axios-debug-log": "^0.8.4",
     "axios-retry": "^3.1.9",
-    "ci-info": "^3.2.0",
+    "ci-info": "^3.8.0",
     "form-data": "^4.0.0",
     "glob": "^7.2.0",
     "lodash": "^4.17.21",
