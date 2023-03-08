@@ -22,22 +22,22 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: '16'
           cache: 'npm'
       - run: npm ci
       - run: npm run build
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: dist
           path: dist
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: action-dist
           path: integrations/action/dist
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: buildkite-bin
           path: integrations/check-run-reporter-buildkite-plugin/bin
@@ -47,14 +47,14 @@ jobs:
       - build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v3
         with:
           node-version: '16'
           cache: 'npm'
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v3
         with:
           name: action-dist
           path: integrations/action/dist
@@ -87,18 +87,18 @@ jobs:
         nodeCount: [2]
         nodeIndex: [0, 1]
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: '16'
           cache: 'npm'
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v3
         with:
           name: action-dist
           path: integrations/action/dist
       - run: npm i -g npm@7
       - run: npm ci
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v3
         with:
           name: dist
           path: dist
@@ -121,7 +121,7 @@ jobs:
   lint-integrations-buildkite:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: 'docker://buildkite/plugin-linter'
         with:
           args:  --id check-run-reporter/check-run-reporter --path /github/workspace/integrations/check-run-reporter-buildkite-plugin
@@ -131,10 +131,10 @@ jobs:
       - build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           submodules: recursive
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v3
         with:
           name: buildkite-bin
           path: integrations/check-run-reporter-buildkite-plugin/bin
@@ -153,8 +153,8 @@ jobs:
       - test-integrations-buildkite
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: '16'
           cache: 'npm'
