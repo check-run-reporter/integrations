@@ -5,10 +5,10 @@
 > Check Run Reporter's client library, CLI, and CI integrations.
 
 This is a monorepo (sort of) for Check Run Reporter's client library, CLI, and
-CI integrations. Instead of mainting separate test suites (if any tests at all)
-for each plugin, this repo contains the core TypeScript code as well as CI
+CI integrations. Instead of maintaining separate test suites (if any tests at
+all) for each plugin, this repo contains the core TypeScript code as well as CI
 plugin integration code. As part of the build and release process, each plugin
-is pushed to the appopropriate repository for consumption.
+is pushed to the appropriate repository for consumption.
 
 <!-- toc -->
 
@@ -27,7 +27,7 @@ For the various CI integrations, check the READMEs in their
 [respective repos](https://github.com/check-run-reporter).
 
 For the CLI, download the
-[latest releast](https://github.com/check-run-reporter/integrations/releases).
+[latest releas](https://github.com/check-run-reporter/integrations/releases).
 Binaries are available for Linux, macOS, and Windows.
 
 ## Usage
@@ -35,7 +35,7 @@ Binaries are available for Linux, macOS, and Windows.
 For the various CI integrations, check the READMEs in their
 [respective repos](https://github.com/check-run-reporter).
 
-For the CLI, get the most up to date documentation by running `crr --help`.
+For the CLI, get the most up-to-date documentation by running `crr --help`.
 
 ### Examples
 
@@ -63,8 +63,8 @@ crr submit \
 If you're on the Persistent plan, you can use Check Run Reporter to efficiently
 distribute your tests across multiple test runners.
 
-`crr split` prints the names of all of the test files that should be run by this
-node. Specify the `--nodeCount` and `--nodeIndex` options to to tell Check Run
+`crr split` prints the names of all the test files that should be run by this
+node. Specify the `--nodeCount` and `--nodeIndex` options to tell Check Run
 Reporter how many nodes there are and which node this is. Use the `--tests`
 option to identify all candidate test files. Any tests that Check Run Reporter
 has seen before will be evenly distributed while new test will be spread
@@ -86,8 +86,8 @@ npx jest $(crr split \
 ## Contributing
 
 We welcome pull requests, but for anything more than a minor tweak, please
-create an issue for so we can discuss whether the change is the right direction
-for the project.
+create an issue so we can discuss whether the change is the right direction for
+the project.
 
 ## License
 
