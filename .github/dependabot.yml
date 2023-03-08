@@ -15,8 +15,7 @@ updates:
     directory: "/"
     ignore:
       - dependency-name: "@types/node"
-        versions:
-        - "> 14"
+        update-types: ['version-update:semver-major']
     schedule:
       interval: "daily"
     versioning-strategy: "increase"
