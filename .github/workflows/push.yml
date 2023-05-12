@@ -140,7 +140,7 @@ jobs:
           path: integrations/check-run-reporter-buildkite-plugin/bin
       # artifacts strip file permissions
       - run: chmod +x integrations/check-run-reporter-buildkite-plugin/bin/*
-      - run: ./integrations/check-run-reporter-buildkite-plugin/tests/bats/bin/bats ./integrations/check-run-reporter-buildkite-plugin/tests/post-command.bats
+      - run: ./integrations/check-run-reporter-buildkite-plugin/tests/bats/bin/bats ./integrations/check-run-reporter-buildkite-plugin/tests/*.bats
 
   release:
     needs:
