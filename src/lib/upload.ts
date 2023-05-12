@@ -7,6 +7,8 @@ import {Context, Optional} from './types';
 
 interface UploadArgs {
   readonly label: Optional<string>;
+  readonly nodeCount: number;
+  readonly nodeIndex: number;
   readonly report: readonly string[];
   readonly root: string;
   readonly sha: string;
@@ -53,11 +55,11 @@ export async function getSignedUploadUrls(
   filenames: readonly string[],
   {client}: Context
 ): Promise<{keys: string[]; signature: string; urls: Record<string, string>}> {
-  const {label, root, sha, token} = args;
+  const {label, nodeCount, nodeIndex, root, sha, token} = args;
 
   const response = await client.post(
     PATH_MULTI_STEP_UPLOAD,
-    {filenames, label, root, sha},
+    {filenames, label, nodeCount, nodeIndex, root, sha},
     {
       auth: {password: token, username: 'token'},
       maxContentLength: Infinity,
@@ -94,13 +96,15 @@ export async function finishMultistepUpload(
   signature: string,
   {client}: Context
 ) {
-  const {label, root, sha, token} = args;
+  const {label, nodeCount, nodeIndex, root, sha, token} = args;
 
   const response = await client.patch(
     PATH_MULTI_STEP_UPLOAD,
     {
       keys,
       label,
+      nodeCount,
+      nodeIndex,
       root,
       sha,
       signature,

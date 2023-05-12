@@ -71,12 +71,28 @@ has seen before will be evenly distributed while new test will be spread
 round-robin.
 
 ```sh
+JEST_JUNIT_OUTPUT_DIR='reports/junit' \
+JEST_JUNIT_ANCESTOR_SEPARATOR=' › ' \
+JEST_JUNIT_CLASSNAME='{classname}' \
+JEST_JUNIT_INCLUDE_CONSOLE_OUTPUT=true \
+JEST_JUNIT_OUTPUT_NAME='jest.xml' \
+JEST_JUNIT_SUITE_NAME='Some Label' \
+JEST_JUNIT_TITLE='{title}' \
+
 npx jest $(crr split \
   --label='Unit Tests' \
   --nodeCount=3 \
   --nodeIndex=1 \
   --tests='src/**/*.spec.ts' \
   --token=$CHECK_RUN_REPORTER_TOKEN)
+
+crr submit \
+  --label='Some Label' \
+  --nodeCount=3 \
+  --nodeIndex=1 \
+  --report='reports/junit/**/*.xml' \
+  --token='<your token>' \
+  --sha="$(git rev-parse HEAD)"
 ```
 
 ## Maintainers

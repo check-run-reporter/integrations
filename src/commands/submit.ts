@@ -8,6 +8,8 @@ import {getRequestId} from '../lib/axios';
 
 interface SubmitArgs {
   readonly label: Optional<string>;
+  readonly nodeCount: number;
+  readonly nodeIndex: number;
   readonly report: readonly string[];
   readonly root: string;
   readonly sha: string;
