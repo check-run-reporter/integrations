@@ -101,6 +101,14 @@ export function cli(argv: string[]) {
             description: 'Label that should appear in the GitHub check run.',
             type: 'string',
           },
+          nodeCount: {
+            default: 1,
+            type: 'number',
+          },
+          nodeIndex: {
+            default: 0,
+            type: 'number',
+          },
           report: {
             demandOption: true,
             description:
