@@ -1,10 +1,7 @@
 import fs from 'fs';
 
-import FormData from 'form-data';
+import {PATH_MULTI_STEP_UPLOAD} from '../constants';
 
-import {PATH_MULTI_STEP_UPLOAD, PATH_SINGLE_STEP_UPLOAD} from '../constants';
-
-import {getRequestId} from './axios';
 import {multiGlob} from './file';
 import {Context, Optional} from './types';
 
@@ -17,51 +14,6 @@ interface UploadArgs {
 }
 
 type URLs = Record<string, string>;
-/**
- * Uploads directly to Check Run Reporter. This is a legacy solution that no
- * longer works for large submissions thanks to new backend architecture. It
- * remains for compatibility reasons during the transition period, but multstep
- * is the preferred method going forward.
- * @deprecated use multiStepUpload instead
- */
-export async function singleStepUpload(
-  {label, report, root, sha, token}: UploadArgs,
-  context: Context
-) {
-  const {client, logger} = context;
-
-  logger.info(`Label: ${label}`);
-  logger.info(`Root: ${root}`);
-  logger.info(`SHA: ${sha}`);
-
-  const filenames = await multiGlob(report, context);
-
-  const formData = new FormData();
-  for (const filename of filenames) {
-    formData.append('report', fs.createReadStream(filename));
-  }
-
-  if (label) {
-    formData.append('label', label);
-  }
-  formData.append('root', root);
-  formData.append('sha', sha);
-
-  const response = await client.post(PATH_SINGLE_STEP_UPLOAD, formData, {
-    auth: {password: token, username: 'token'},
-    headers: {
-      ...formData.getHeaders(),
-    },
-    maxContentLength: Infinity,
-  });
-
-  logger.info(`Request ID: ${getRequestId(response)}`);
-  logger.info(`Status: ${response.status}`);
-  logger.info(`StatusText: ${response.statusText}`);
-  logger.info(JSON.stringify(response.data, null, 2));
-
-  return response;
-}
 
 /**
  * Orchestrates the multi-step upload process.
@@ -77,7 +29,7 @@ export async function multiStepUpload(args: UploadArgs, context: Context) {
   logger.info(`Root: ${root}`);
   logger.info(`SHA: ${sha}`);
 
-  const filenames = await multiGlob(report, context);
+  const filenames = multiGlob(report, context);
   logger.group('Requesting signed urls');
   const {keys, urls, signature} = await getSignedUploadUrls(
     args,

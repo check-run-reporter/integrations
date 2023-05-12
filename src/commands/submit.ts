@@ -3,8 +3,7 @@ import util from 'util';
 import axios from 'axios';
 
 import {Context, Optional} from '../lib/types';
-// eslint-disable-next-line import/no-deprecated
-import {multiStepUpload, singleStepUpload} from '../lib/upload';
+import {multiStepUpload} from '../lib/upload';
 import {getRequestId} from '../lib/axios';
 
 interface SubmitArgs {
@@ -23,7 +22,7 @@ export async function submit(input: SubmitArgs, context: Context) {
 
   try {
     logger.group('Uploading report to Check Run Reporter');
-    await tryMultiStepUploadOrFallbackToSingle(input, context);
+    await multiStepUpload(input, context);
   } catch (err) {
     if (axios.isAxiosError(err)) {
       if (!err.response) {
@@ -46,35 +45,5 @@ export async function submit(input: SubmitArgs, context: Context) {
     throw err;
   } finally {
     logger.groupEnd();
-  }
-}
-/**
- * Attempts to use multistep upload, but falls back to the legacy system if it
- * gets a 404. This _should_ make things future proof so it'll get more
- * efficient once the new version is released.
- */
-async function tryMultiStepUploadOrFallbackToSingle(
-  input: SubmitArgs,
-  context: Context
-) {
-  try {
-    return await multiStepUpload(input, context);
-  } catch (err) {
-    if (axios.isAxiosError(err)) {
-      // CI doesn't like safe-access here.
-      if (
-        (err.response && err.response.status === 404) ||
-        err.code === 'ECONNABORTED'
-      ) {
-        context.logger.info(
-          'Received 404 trying to get signed URLs. Assuming feature is notn released yet and falling back to single step upload',
-          {err}
-        );
-        // eslint-disable-next-line import/no-deprecated
-        return await singleStepUpload(input, context);
-      }
-    }
-
-    throw err;
   }
 }

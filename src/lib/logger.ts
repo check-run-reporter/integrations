@@ -3,7 +3,7 @@ import ci from 'ci-info';
 type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 
 /**
- * Some CI services incldue utility syntax for doing novel things with log
+ * Some CI services include utility syntax for doing novel things with log
  * output. The Logger interfaces lets us do "the right thing" for those
  * services.
  */
