@@ -9,7 +9,7 @@
   "module": "./dist/esm/index.js",
   "types": "./dist/types/index.d.ts",
   "engines": {
-    "node": "=16"
+    "node": "20.x"
   },
   "scripts": {
     "build": "if command -v gmake 2>/dev/null; then gmake all; else make all; fi",
@@ -48,7 +48,7 @@
     "@types/jest": "^27.0.2",
     "@types/lodash": "^4.14.178",
     "@types/nock": "^11.1.0",
-    "@types/node": "^16",
+    "@types/node": "^20",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.33.0",
     "@vercel/ncc": "^0.31.1",
