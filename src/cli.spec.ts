@@ -1,3 +1,5 @@
+import assert from 'node:assert';
+
 import {cli} from './cli';
 
 /* eslint-disable @typescript-eslint/no-empty-function */
@@ -18,6 +20,17 @@ beforeEach(() => {
 
 it('prints help and exits', () => {
   cli(['', '']);
+  // This is a hack to deal with CI having a differing executable name for some.
+  // CI used to work just fine (a main branch build fully passed tests), but now
+  // an unchanged branch off of main using a different process name.
+  stderr.mock.calls.forEach((call) => {
+    assert(Array.isArray(call));
+    call.forEach((c, index) => {
+      assert(typeof c === 'string');
+      call[index] = c.replace(/processChild.js/g, 'jest');
+    });
+  });
+
   expect(stdout.mock.calls).toMatchInlineSnapshot(`[]`);
   expect(stderr.mock.calls).toMatchInlineSnapshot(`
     [
