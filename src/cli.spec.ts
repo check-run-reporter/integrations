@@ -1,3 +1,5 @@
+import assert from 'node:assert';
+
 import {cli} from './cli';
 
 /* eslint-disable @typescript-eslint/no-empty-function */
@@ -18,38 +20,49 @@ beforeEach(() => {
 
 it('prints help and exits', () => {
   cli(['', '']);
-  expect(stdout.mock.calls).toMatchInlineSnapshot(`Array []`);
+  // This is a hack to deal with CI having a differing executable name for some.
+  // CI used to work just fine (a main branch build fully passed tests), but now
+  // an unchanged branch off of main using a different process name.
+  stderr.mock.calls.forEach((call) => {
+    assert(Array.isArray(call));
+    call.forEach((c, index) => {
+      assert(typeof c === 'string');
+      call[index] = c.replace(/processChild.js/g, 'jest');
+    });
+  });
+
+  expect(stdout.mock.calls).toMatchInlineSnapshot(`[]`);
   expect(stderr.mock.calls).toMatchInlineSnapshot(`
-Array [
-  Array [
-    "jest <command>
+    [
+      [
+        "jest <command>
 
-Commands:
-  jest split   Split tests across multiple executors
-  jest submit  Submit report files to Check Run Reporter
+    Commands:
+      jest split   Split tests across multiple executors
+      jest submit  Submit report files to Check Run Reporter
 
-Options:
-  --version  Show version number                                       [boolean]
-  --help     Show help                                                 [boolean]",
-  ],
-  Array [],
-  Array [
-    "Not enough non-option arguments: got 0, need at least 1",
-  ],
-]
-`);
+    Options:
+      --version  Show version number                                       [boolean]
+      --help     Show help                                                 [boolean]",
+      ],
+      [],
+      [
+        "Not enough non-option arguments: got 0, need at least 1",
+      ],
+    ]
+  `);
   expect(exit).toBeCalledWith(1);
 });
 
 it('prints the version and exits', () => {
   cli(['', '', '--version']);
   expect(stdout.mock.calls).toMatchInlineSnapshot(`
-Array [
-  Array [
-    "0.0.0-development",
-  ],
-]
-`);
-  expect(stderr.mock.calls).toMatchInlineSnapshot(`Array []`);
+    [
+      [
+        "0.0.0-development",
+      ],
+    ]
+  `);
+  expect(stderr.mock.calls).toMatchInlineSnapshot(`[]`);
   expect(exit).toBeCalledWith(0);
 });
