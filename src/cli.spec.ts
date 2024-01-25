@@ -18,38 +18,38 @@ beforeEach(() => {
 
 it('prints help and exits', () => {
   cli(['', '']);
-  expect(stdout.mock.calls).toMatchInlineSnapshot(`Array []`);
+  expect(stdout.mock.calls).toMatchInlineSnapshot(`[]`);
   expect(stderr.mock.calls).toMatchInlineSnapshot(`
-Array [
-  Array [
-    "jest <command>
+    [
+      [
+        "jest <command>
 
-Commands:
-  jest split   Split tests across multiple executors
-  jest submit  Submit report files to Check Run Reporter
+    Commands:
+      jest split   Split tests across multiple executors
+      jest submit  Submit report files to Check Run Reporter
 
-Options:
-  --version  Show version number                                       [boolean]
-  --help     Show help                                                 [boolean]",
-  ],
-  Array [],
-  Array [
-    "Not enough non-option arguments: got 0, need at least 1",
-  ],
-]
-`);
+    Options:
+      --version  Show version number                                       [boolean]
+      --help     Show help                                                 [boolean]",
+      ],
+      [],
+      [
+        "Not enough non-option arguments: got 0, need at least 1",
+      ],
+    ]
+  `);
   expect(exit).toBeCalledWith(1);
 });
 
 it('prints the version and exits', () => {
   cli(['', '', '--version']);
   expect(stdout.mock.calls).toMatchInlineSnapshot(`
-Array [
-  Array [
-    "0.0.0-development",
-  ],
-]
-`);
-  expect(stderr.mock.calls).toMatchInlineSnapshot(`Array []`);
+    [
+      [
+        "0.0.0-development",
+      ],
+    ]
+  `);
+  expect(stderr.mock.calls).toMatchInlineSnapshot(`[]`);
   expect(exit).toBeCalledWith(0);
 });
