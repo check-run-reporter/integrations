@@ -111,14 +111,20 @@ $(DIST_TYPES_FILES) &: $(SRC_FILES)
 dist/ncc/index.js: $(SRC_FILES)
 > $(NPX) ncc build ./src/cli.ts --source-map --out dist/ncc
 
+# Vercel has abandoned pkg, so we're stuck with bundling node18 likely until
+# node22 goes lts with native support for single executable applications
 dist/pkg/crr-$(VERSION)-linux: dist/ncc/index.js
-> $(NPX) pkg . --target linux --output $@
+> $(NPX) pkg . --target node18-linux --output $@
 
+# Vercel has abandoned pkg, so we're stuck with bundling node18 likely until
+# node22 goes lts with native support for single executable applications
 dist/pkg/crr-$(VERSION)-macos: dist/ncc/index.js
-> $(NPX) pkg . --target macos --output $@
+> $(NPX) pkg . --target node18-macos --output $@
 
+# Vercel has abandoned pkg, so we're stuck with bundling node18 likely until
+# node22 goes lts with native support for single executable applications
 dist/pkg/crr-$(VERSION)-windows.exe: dist/ncc/index.js
-> $(NPX) pkg . --target windows --output $@
+> $(NPX) pkg . --target node18-windows --output $@
 
 README.md:
 > $(NPX) markdown-toc -i --bullets='-' --maxdepth=3 README.md
