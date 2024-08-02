@@ -84,7 +84,7 @@
     "*.ts": "npm run eslint -- "
   },
   "dependencies": {
-    "axios": "^0.24.0",
+    "axios": "^1.7.3",
     "axios-debug-log": "^0.8.4",
     "axios-retry": "^3.1.9",
     "ci-info": "^4.0.0",
